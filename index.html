@@ -135,3 +135,50 @@
               prev=sec.querySelector('[data-prev]'),
               next=sec.querySelector('[data-next]');
         let index=0,visible=3,cardW=0,timer=null;
+
+        function compute(){
+          const clip=sec.querySelector('.clip'),
+                gap=parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
+          cardW=cards[0].getBoundingClientRect().width+gap;
+          const total=clip.getBoundingClientRect().width+gap;
+          visible=Math.max(1,Math.round(total/cardW));
+          go(index,false);
+        }
+
+        function go(i,animate=true){
+          const maxIndex=Math.max(0,cards.length-visible);
+          index=Math.min(Math.max(0,i),maxIndex);
+          track.style.transitionDuration=animate?'.4s':'0s';
+          track.style.transform=`translateX(${-index*cardW}px)`;
+        }
+
+        function step(dir){go(index+dir,true);}
+
+        prev.addEventListener('click',()=>step(-1));
+        next.addEventListener('click',()=>step(1));
+        window.addEventListener('resize',compute);
+
+        function startAuto(){
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          stopAuto();
+          timer=setInterval(()=>{
+            const maxIndex=Math.max(0,cards.length-visible);
+            if(index>=maxIndex){go(0,true);}else{step(1);}
+          },4000);
+        }
+        function stopAuto(){if(timer){clearInterval(timer);timer=null;}}
+        sec.addEventListener('mouseenter',stopAuto);
+        sec.addEventListener('mouseleave',startAuto);
+        sec.addEventListener('focusin',stopAuto);
+        sec.addEventListener('focusout',startAuto);
+
+        // 초기화 + 이미지 로딩 이후 레이아웃 재계산
+        compute();
+        startAuto();
+        window.addEventListener('load',compute);
+      });
+    })();
+  </script>
+
+</body>
+</html>
