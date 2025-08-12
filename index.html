@@ -3,55 +3,72 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NPML — Carousel (Iframe Safe, Auto-Version)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <title>NPML — Natural Products Metabolomics Lab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root{--brand:#004A9F;--border:#e5e7eb;--muted:#475569;--gap:18px}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:'Lato', Dotum, sans-serif;color:#0f172a}
-    h2{font-family:'Lato', Dotum, sans-serif;font-size:28px;margin:0 0 12px}
-    .wrap{width:min(1200px,92%);margin:24px auto}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Noto Sans KR",sans-serif;color:#0f172a}
+    h2{font-family:Montserrat,sans-serif;font-size:28px;margin-bottom:12px}
+
+    /* Header */
+    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border)}
+    .header-inner{max-width:1200px;margin:0 auto;padding:0 4%;display:flex;justify-content:space-between;align-items:center;height:60px}
+    .brand{font-family:Montserrat,sans-serif;font-weight:700;font-size:20px}
+    nav a{margin-left:20px;text-decoration:none;color:#0f172a;font-weight:600}
+    nav a:hover{color:var(--brand)}
+
+    /* Hero */
+    .hero{text-align:center;padding:30px 4%}
+    .hero h1{font-family:Montserrat,sans-serif;font-size:32px;margin-bottom:8px}
+    .hero p{color:var(--muted)}
+
+    /* Layout */
+    .wrap{max-width:1200px;margin:24px auto;padding:0 4%}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+
+    /* Section */
     .section{border:1px solid var(--border);border-radius:14px;padding:12px}
     .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
     .controls{display:flex;gap:8px}
     .btn{width:36px;height:36px;border:1px solid var(--border);background:#fff;border-radius:10px;display:inline-grid;place-items:center;cursor:pointer}
-    .btn:active{transform:scale(.98)}
     .btn svg{width:18px;height:18px}
-    /* Carousel core */
+
+    /* Carousel */
     .clip{overflow:hidden;border-radius:10px}
-    .track{display:flex;gap:var(--gap);will-change:transform;transition:transform .4s ease}
+    .track{display:flex;gap:var(--gap);transition:transform .4s ease}
     .card{flex:0 0 calc((100% - var(--gap)*2)/3);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
-    @media (max-width: 1200px){.card{flex-basis:calc((100% - var(--gap))/2)}}
-    @media (max-width: 640px){.card{flex-basis:100%}}
+    @media(max-width:1200px){.card{flex-basis:calc((100% - var(--gap))/2)}}
+    @media(max-width:640px){.card{flex-basis:100%}}
     .thumb{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:#fafafa}
     .thumb img{max-width:82%;max-height:82%}
     .body{padding:12px 14px}
-    .title{font-weight:700;margin:0 0 6px}
+    .title{font-weight:700;margin-bottom:6px}
     .meta{color:var(--muted);font-size:13px}
   </style>
-  <script>
-    // 1) Add a one-time version query (?v=YYYYMMDDHHmm) to the page URL (prevents stale HTML cache)
-    (function(){
-      try{
-        var qs = new URLSearchParams(location.search);
-        if(!qs.has('v')){
-          var d = new Date();
-          var pad = n => String(n).padStart(2,'0');
-          var v = d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+pad(d.getHours())+pad(d.getMinutes());
-          qs.set('v', v);
-          var url = location.pathname + '?' + qs.toString() + location.hash;
-          // Single reload to fetch the fresh HTML, then stable.
-          location.replace(url);
-        }
-      }catch(e){/* ignore */}
-    })();
-  </script>
 </head>
 <body>
+
+  <!-- 상단 헤더 -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">NPML</div>
+      <nav>
+        <a href="#home">홈</a>
+        <a href="#research-sec">Research</a>
+        <a href="#pubs-sec">Publications</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 소개 영역 -->
+  <section class="hero" id="home">
+    <h1>Natural Products Metabolomics Lab</h1>
+    <p>천연물 기반 대사체 분석을 통해 활성성분과 작용기전을 규명하는 연구실입니다.</p>
+  </section>
+
+  <!-- 메인 콘텐츠 -->
   <div class="wrap">
     <div class="grid">
       <!-- Research -->
@@ -65,13 +82,11 @@
             <button class="btn" data-next aria-label="다음">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
-            <a class="btn" href="https://sites.google.com/view/npml/research?authuser=1" aria-label="더 보기" title="더 보기">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></a>
           </div>
         </div>
         <div class="clip">
           <div class="track">
-            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/a/640/360" alt=""></div><div class="body"><h3 class="title">대사체 분리 및 동정</h3><div class="meta">활성 성분 분리·동정</div></div></article>
+            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/a/640/360" alt=""></div><div class="body"><h3 class="title">천연물 약리기전</h3><div class="meta">활성 성분 분리·동정</div></div></article>
             <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/b/640/360" alt=""></div><div class="body"><h3 class="title">대사체 바이오마커</h3><div class="meta">LC–MS/NMR</div></div></article>
             <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/c/640/360" alt=""></div><div class="body"><h3 class="title">에너지 대사·섬유화</h3><div class="meta">미토콘드리아 타깃</div></div></article>
             <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/d/640/360" alt=""></div><div class="body"><h3 class="title">신규 화합물</h3><div class="meta">구조·기전 규명</div></div></article>
@@ -105,79 +120,50 @@
   </div>
 
   <script>
-    // 2) Append ?v=<pageParam> to same-origin images (prevents stale image cache after you replace files in repo)
     (function(){
-      try{
-        var v = new URLSearchParams(location.search).get('v') || Date.now();
-        document.querySelectorAll('img').forEach(function(img){
-          var src = img.getAttribute('src');
-          if(!src) return;
-          // Only touch relative or same-origin URLs
-          var u = new URL(src, location.href);
-          if(u.origin !== location.origin) return; // external images untouched
-          if(u.search && u.search.includes('v=')) return;
-          u.search += (u.search ? '&' : '?') + 'v=' + v;
-          img.src = u.toString();
-        });
-      }catch(e){/* ignore */}
-    })();
-  </script>
-
-  <script>
-    // Iframe-safe carousel: translateX based (no scrollBy)
-    (function(){
-      const carousels = document.querySelectorAll('[data-carousel]');
-      carousels.forEach(sec => {
-        const track = sec.querySelector('.track');
-        const cards = Array.from(track.children);
-        const prev = sec.querySelector('[data-prev]');
-        const next = sec.querySelector('[data-next]');
-        let index = 0; // leftmost visible card index
-        let visible = 3; // compute on init
-        let cardW = 0;
-        let timer = null;
+      const carousels=document.querySelectorAll('[data-carousel]');
+      carousels.forEach(sec=>{
+        const track=sec.querySelector('.track'),
+              cards=Array.from(track.children),
+              prev=sec.querySelector('[data-prev]'),
+              next=sec.querySelector('[data-next]');
+        let index=0,visible=3,cardW=0,timer=null;
 
         function compute(){
-          const clip = sec.querySelector('.clip');
-          const gap = parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
-          cardW = cards[0].getBoundingClientRect().width + gap;
-          const total = clip.getBoundingClientRect().width + gap;
-          visible = Math.max(1, Math.round(total / cardW));
-          go(index, false);
+          const clip=sec.querySelector('.clip'),
+                gap=parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
+          cardW=cards[0].getBoundingClientRect().width+gap;
+          const total=clip.getBoundingClientRect().width+gap;
+          visible=Math.max(1,Math.round(total/cardW));
+          go(index,false);
         }
-
-        function go(i, animate=true){
-          const maxIndex = Math.max(0, cards.length - visible);
-          index = Math.min(Math.max(0, i), maxIndex);
-          track.style.transitionDuration = animate ? '.4s' : '0s';
-          track.style.transform = `translateX(${-index * cardW}px)`;
+        function go(i,animate=true){
+          const maxIndex=Math.max(0,cards.length-visible);
+          index=Math.min(Math.max(0,i),maxIndex);
+          track.style.transitionDuration=animate?'.4s':'0s';
+          track.style.transform=`translateX(${-index*cardW}px)`;
         }
-
-        function step(dir){ go(index + dir, true); }
-
-        prev.addEventListener('click', () => step(-1));
-        next.addEventListener('click', () => step(+1));
-        window.addEventListener('resize', compute);
+        function step(dir){go(index+dir,true);}
+        prev.addEventListener('click',()=>step(-1));
+        next.addEventListener('click',()=>step(1));
+        window.addEventListener('resize',compute);
 
         function startAuto(){
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
           stopAuto();
-          timer = setInterval(()=>{
-            const maxIndex = Math.max(0, cards.length - visible);
-            if (index >= maxIndex) { go(0, true); } else { step(+1); }
-          }, 4000);
+          timer=setInterval(()=>{
+            const maxIndex=Math.max(0,cards.length-visible);
+            if(index>=maxIndex){go(0,true);}else{step(1);}
+          },4000);
         }
-        function stopAuto(){ if (timer) { clearInterval(timer); timer = null; } }
-        sec.addEventListener('mouseenter', stopAuto);
-        sec.addEventListener('mouseleave', startAuto);
-        sec.addEventListener('focusin', stopAuto);
-        sec.addEventListener('focusout', startAuto);
+        function stopAuto(){if(timer){clearInterval(timer);timer=null;}}
+        sec.addEventListener('mouseenter',stopAuto);
+        sec.addEventListener('mouseleave',startAuto);
 
-        compute();
-        startAuto();
-        window.addEventListener('load', compute);
+        compute();startAuto();
+        window.addEventListener('load',compute);
       });
     })();
   </script>
+
 </body>
 </html>
