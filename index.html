@@ -4,11 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NPML — Natural Products Metabolomics Lab</title>
+
+  <!-- 폰트: preconnect로 초기 로딩 빨라짐 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     :root{--brand:#004A9F;--border:#e5e7eb;--muted:#475569;--gap:18px}
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:"Noto Sans KR",sans-serif;color:#0f172a}
+    body{font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a}
     h2{font-family:Montserrat,sans-serif;font-size:28px;margin-bottom:12px}
 
     /* Header */
@@ -33,11 +38,12 @@
     .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
     .controls{display:flex;gap:8px}
     .btn{width:36px;height:36px;border:1px solid var(--border);background:#fff;border-radius:10px;display:inline-grid;place-items:center;cursor:pointer}
+    .btn:active{transform:scale(.98)}
     .btn svg{width:18px;height:18px}
 
     /* Carousel */
     .clip{overflow:hidden;border-radius:10px}
-    .track{display:flex;gap:var(--gap);transition:transform .4s ease}
+    .track{display:flex;gap:var(--gap);will-change:transform;transition:transform .4s ease}
     .card{flex:0 0 calc((100% - var(--gap)*2)/3);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
     @media(max-width:1200px){.card{flex-basis:calc((100% - var(--gap))/2)}}
     @media(max-width:640px){.card{flex-basis:100%}}
@@ -120,6 +126,7 @@
   </div>
 
   <script>
+    // iframe-safe carousel (translateX 기반), 자동슬라이드/일시정지, 이미지 로드 후 재계산, reduce-motion 존중
     (function(){
       const carousels=document.querySelectorAll('[data-carousel]');
       carousels.forEach(sec=>{
@@ -128,42 +135,3 @@
               prev=sec.querySelector('[data-prev]'),
               next=sec.querySelector('[data-next]');
         let index=0,visible=3,cardW=0,timer=null;
-
-        function compute(){
-          const clip=sec.querySelector('.clip'),
-                gap=parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
-          cardW=cards[0].getBoundingClientRect().width+gap;
-          const total=clip.getBoundingClientRect().width+gap;
-          visible=Math.max(1,Math.round(total/cardW));
-          go(index,false);
-        }
-        function go(i,animate=true){
-          const maxIndex=Math.max(0,cards.length-visible);
-          index=Math.min(Math.max(0,i),maxIndex);
-          track.style.transitionDuration=animate?'.4s':'0s';
-          track.style.transform=`translateX(${-index*cardW}px)`;
-        }
-        function step(dir){go(index+dir,true);}
-        prev.addEventListener('click',()=>step(-1));
-        next.addEventListener('click',()=>step(1));
-        window.addEventListener('resize',compute);
-
-        function startAuto(){
-          stopAuto();
-          timer=setInterval(()=>{
-            const maxIndex=Math.max(0,cards.length-visible);
-            if(index>=maxIndex){go(0,true);}else{step(1);}
-          },4000);
-        }
-        function stopAuto(){if(timer){clearInterval(timer);timer=null;}}
-        sec.addEventListener('mouseenter',stopAuto);
-        sec.addEventListener('mouseleave',startAuto);
-
-        compute();startAuto();
-        window.addEventListener('load',compute);
-      });
-    })();
-  </script>
-
-</body>
-</html>
