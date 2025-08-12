@@ -1,80 +1,67 @@
 <!doctype html>
 <html lang="ko">
 <head>
+<script>
+  // ── 자동 캐시버스터: URL에 ?v=YYYYMMDD-HHMM 자동 추가 ──
+  (function(){
+    try{
+      const url = new URL(location.href);
+      // 이미 v 파라미터가 있으면 그대로 둠
+      if (url.searchParams.has('v')) return;
+
+      // 자동 버전: 현재 한국시간 기준 YYYYMMDD-HHMM
+      const pad = n => String(n).padStart(2,'0');
+      const now = new Date();
+      const krTime = new Date(now.getTime() + (9 * 60 * 60 * 1000)); // UTC+9 보정
+      const autoVer = krTime.getUTCFullYear()
+        + pad(krTime.getUTCMonth() + 1)
+        + pad(krTime.getUTCDate())
+        + '-' + pad(krTime.getUTCHours())
+        + pad(krTime.getUTCMinutes())
+        + pad(krTime.getUTCSeconds()); // 초까지 포함
+
+      url.searchParams.set('v', autoVer);
+      location.replace(url.toString()); // 뒤로가기 이슈 없게 교체
+    }catch(e){
+      console.warn('버전 파라미터 자동 추가 실패:', e);
+    }
+  })();
+</script>
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NPML — Natural Products Metabolomics Lab</title>
-
-  <!-- 폰트: preconnect로 초기 로딩 빨라짐 -->
+  <title>NPML — Carousel (Iframe Safe)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
-
   <style>
     :root{--brand:#004A9F;--border:#e5e7eb;--muted:#475569;--gap:18px}
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a}
-    h2{font-family:Montserrat,sans-serif;font-size:28px;margin-bottom:12px}
-
-    /* Header */
-    header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border)}
-    .header-inner{max-width:1200px;margin:0 auto;padding:0 4%;display:flex;justify-content:space-between;align-items:center;height:60px}
-    .brand{font-family:Montserrat,sans-serif;font-weight:700;font-size:20px}
-    nav a{margin-left:20px;text-decoration:none;color:#0f172a;font-weight:600}
-    nav a:hover{color:var(--brand)}
-
-    /* Hero */
-    .hero{text-align:center;padding:30px 4%}
-    .hero h1{font-family:Montserrat,sans-serif;font-size:32px;margin-bottom:8px}
-    .hero p{color:var(--muted)}
-
-    /* Layout */
-    .wrap{max-width:1200px;margin:24px auto;padding:0 4%}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a}
+    h2{font-family:Montserrat, sans-serif;font-size:28px;margin:0 0 12px}
+    .wrap{width:min(1200px,92%);margin:24px auto}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
-
-    /* Section */
+    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
     .section{border:1px solid var(--border);border-radius:14px;padding:12px}
     .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
     .controls{display:flex;gap:8px}
     .btn{width:36px;height:36px;border:1px solid var(--border);background:#fff;border-radius:10px;display:inline-grid;place-items:center;cursor:pointer}
     .btn:active{transform:scale(.98)}
     .btn svg{width:18px;height:18px}
-
-    /* Carousel */
+    /* Carousel core */
     .clip{overflow:hidden;border-radius:10px}
     .track{display:flex;gap:var(--gap);will-change:transform;transition:transform .4s ease}
     .card{flex:0 0 calc((100% - var(--gap)*2)/3);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
-    @media(max-width:1200px){.card{flex-basis:calc((100% - var(--gap))/2)}}
-    @media(max-width:640px){.card{flex-basis:100%}}
+    @media (max-width: 1200px){.card{flex-basis:calc((100% - var(--gap))/2)}}
+    @media (max-width: 640px){.card{flex-basis:100%}}
     .thumb{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:#fafafa}
     .thumb img{max-width:82%;max-height:82%}
     .body{padding:12px 14px}
-    .title{font-weight:700;margin-bottom:6px}
+    .title{font-weight:700;margin:0 0 6px}
     .meta{color:var(--muted);font-size:13px}
   </style>
 </head>
 <body>
-
-  <!-- 상단 헤더 -->
-  <header>
-    <div class="header-inner">
-      <div class="brand">NPML</div>
-      <nav>
-        <a href="#home">홈</a>
-        <a href="#research-sec">Research</a>
-        <a href="#pubs-sec">Publications</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- 소개 영역 -->
-  <section class="hero" id="home">
-    <h1>Natural Products Metabolomics Lab</h1>
-    <p>천연물 기반 대사체 분석을 통해 활성성분과 작용기전을 규명하는 연구실입니다.</p>
-  </section>
-
-  <!-- 메인 콘텐츠 -->
   <div class="wrap">
     <div class="grid">
       <!-- Research -->
@@ -126,84 +113,66 @@
   </div>
 
   <script>
-    // iframe-safe carousel (translateX 기반), 자동슬라이드/일시정지, 이미지 로드 후 재계산, reduce-motion 존중
+    // Iframe-safe carousel: translateX 기반 (scrollBy 미사용)
     (function(){
-      const carousels=document.querySelectorAll('[data-carousel]');
-      carousels.forEach(sec=>{
-        const track=sec.querySelector('.track'),
-              cards=Array.from(track.children),
-              prev=sec.querySelector('[data-prev]'),
-              next=sec.querySelector('[data-next]');
-        let index=0,visible=3,cardW=0,timer=null;
+      const carousels = document.querySelectorAll('[data-carousel]');
+      carousels.forEach(sec => {
+        const track = sec.querySelector('.track');
+        const cards = Array.from(track.children);
+        const prev = sec.querySelector('[data-prev]');
+        const next = sec.querySelector('[data-next]');
+        let index = 0; // leftmost visible card index
+        let visible = 3; // default, will compute
+        let cardW = 0;
+        let timer = null;
 
         function compute(){
-          const clip=sec.querySelector('.clip'),
-                gap=parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
-          cardW=cards[0].getBoundingClientRect().width+gap;
-          const total=clip.getBoundingClientRect().width+gap;
-          visible=Math.max(1,Math.round(total/cardW));
-          go(index,false);
+          const clip = sec.querySelector('.clip');
+          const gap = parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
+          // Estimate how many cards fit: check width
+          cardW = cards[0].getBoundingClientRect().width + gap;
+          const total = clip.getBoundingClientRect().width + gap;
+          visible = Math.max(1, Math.round(total / cardW));
+          go(index, false);
         }
 
-        function go(i,animate=true){
-          const maxIndex=Math.max(0,cards.length-visible);
-          index=Math.min(Math.max(0,i),maxIndex);
-          track.style.transitionDuration=animate?'.4s':'0s';
-          track.style.transform=`translateX(${-index*cardW}px)`;
+        function go(i, animate=true){
+          const maxIndex = Math.max(0, cards.length - visible);
+          index = Math.min(Math.max(0, i), maxIndex);
+          track.style.transitionDuration = animate ? '.4s' : '0s';
+          track.style.transform = `translateX(${-index * cardW}px)`;
         }
 
-        function step(dir){go(index+dir,true);}
+        function step(dir){
+          go(index + dir, true);
+        }
 
-        prev.addEventListener('click',()=>step(-1));
-        next.addEventListener('click',()=>step(1));
-        window.addEventListener('resize',compute);
+        prev.addEventListener('click', () => step(-1));
+        next.addEventListener('click', () => step(+1));
+        window.addEventListener('resize', compute);
 
+        // auto slide (pause on hover/focus for accessibility)
         function startAuto(){
           if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
           stopAuto();
-          timer=setInterval(()=>{
-            const maxIndex=Math.max(0,cards.length-visible);
-            if(index>=maxIndex){go(0,true);}else{step(1);}
-          },4000);
+          timer = setInterval(()=>{
+            const maxIndex = Math.max(0, cards.length - visible);
+            if (index >= maxIndex) { go(0, true); } else { step(+1); }
+          }, 4000);
         }
-        function stopAuto(){if(timer){clearInterval(timer);timer=null;}}
-        sec.addEventListener('mouseenter',stopAuto);
-        sec.addEventListener('mouseleave',startAuto);
-        sec.addEventListener('focusin',stopAuto);
-        sec.addEventListener('focusout',startAuto);
+        function stopAuto(){ if (timer) { clearInterval(timer); timer = null; } }
+        sec.addEventListener('mouseenter', stopAuto);
+        sec.addEventListener('mouseleave', startAuto);
+        sec.addEventListener('focusin', stopAuto);
+        sec.addEventListener('focusout', startAuto);
 
-        // 초기화 + 이미지 로딩 이후 레이아웃 재계산
+        // init
         compute();
         startAuto();
-        window.addEventListener('load',compute);
+        // Recompute after images load (layout shifts)
+        window.addEventListener('load', compute);
       });
     })();
   </script>
-  <script>
-  // ── 자동 캐시버스터: URL에 ?v=YYYYMMDD-HHMM 자동 추가 ──
-  (function(){
-    try{
-      const url = new URL(location.href);
-      // 이미 v 파라미터가 있으면 그대로 둠
-      if (url.searchParams.has('v')) return;
-
-      // 자동 버전: 현재 한국시간 기준 YYYYMMDD-HHMM
-      const pad = n => String(n).padStart(2,'0');
-      const now = new Date();
-      const krTime = new Date(now.getTime() + (9 * 60 * 60 * 1000)); // UTC+9 보정
-      const autoVer = krTime.getUTCFullYear()
-        + pad(krTime.getUTCMonth() + 1)
-        + pad(krTime.getUTCDate())
-        + '-' + pad(krTime.getUTCHours())
-        + pad(krTime.getUTCMinutes());
-
-      url.searchParams.set('v', autoVer);
-      location.replace(url.toString()); // 뒤로가기 이슈 없게 교체
-    }catch(e){
-      console.warn('버전 파라미터 자동 추가 실패:', e);
-    }
-  })();
-</script>
-
 </body>
 </html>
