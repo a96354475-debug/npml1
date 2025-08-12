@@ -1,33 +1,6 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<script>
-  // ── 자동 캐시버스터: URL에 ?v=YYYYMMDD-HHMM 자동 추가 ──
-  (function(){
-    try{
-      const url = new URL(location.href);
-      // 이미 v 파라미터가 있으면 그대로 둠
-      if (url.searchParams.has('v')) return;
-
-      // 자동 버전: 현재 한국시간 기준 YYYYMMDD-HHMM
-      const pad = n => String(n).padStart(2,'0');
-      const now = new Date();
-      const krTime = new Date(now.getTime() + (9 * 60 * 60 * 1000)); // UTC+9 보정
-      const autoVer = krTime.getUTCFullYear()
-        + pad(krTime.getUTCMonth() + 1)
-        + pad(krTime.getUTCDate())
-        + '-' + pad(krTime.getUTCHours())
-        + pad(krTime.getUTCMinutes())
-        + pad(krTime.getUTCSeconds()); // 초까지 포함
-
-      url.searchParams.set('v', autoVer);
-      location.replace(url.toString()); // 뒤로가기 이슈 없게 교체
-    }catch(e){
-      console.warn('버전 파라미터 자동 추가 실패:', e);
-    }
-  })();
-</script>
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NPML — Carousel (Iframe Safe)</title>
