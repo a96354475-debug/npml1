@@ -3,38 +3,173 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NPML — Carousel (Iframe Safe)</title>
+  <title>NPML — Natural Products Metabolomics Lab</title>
+
+  <!-- 0) 페이지가 열릴 때 ?v=YYYYMMDD-HHMMSS 자동 붙여서 캐시 우회 -->
+  <script>
+    (function(){
+      try{
+        const url=new URL(location.href);
+        if(url.searchParams.has('v')) return;
+        const pad=n=>String(n).padStart(2,'0');
+        const now=new Date();
+        const kr=new Date(now.getTime()+9*3600*1000);
+        const ver=kr.getUTCFullYear()+pad(kr.getUTCMonth()+1)+pad(kr.getUTCDate())
+          +'-'+pad(kr.getUTCHours())+pad(kr.getUTCMinutes())+pad(kr.getUTCSeconds());
+        url.searchParams.set('v',ver);
+        location.replace(url.toString());
+      }catch(e){console.warn('cachebuster failed',e);}
+    })();
+  </script>
+
+  <!-- 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
-    :root{--brand:#004A9F;--border:#e5e7eb;--muted:#475569;--gap:18px}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a}
-    h2{font-family:Montserrat, sans-serif;font-size:28px;margin:0 0 12px}
-    .wrap{width:min(1200px,92%);margin:24px auto}
+    /* ===== Theme 변수 (색/배경/배너이미지 한 곳에서 변경) ===== */
+    :root{
+      --brand:#004A9F;          /* 메인 포인트 색 */
+      --brand-2:#0ea5e9;        /* 보조 포인트 색 (버튼/라벨 등) */
+      --border:#e5e7eb;         /* 테두리 */
+      --muted:#475569;          /* 설명글자 */
+      --footer-bg:#0f172a;      /* 하단(개인정보/연락처) 배경색 */
+      --footer-fg:#e2e8f0;      /* 하단 글자색 */
+      --quick1:#2563eb;         /* 바로가기 카드1 */
+      --quick2:#0ea5e9;         /* 바로가기 카드2 */
+      --quick3:#10b981;         /* 바로가기 카드3 */
+      --gap:18px;
+
+      /* 히어로 배너 이미지: 나중에 형 파일로 교체 */
+      --hero-img:url('https://images.unsplash.com/photo-1527477396000-e27163b481c2?q=80&w=1600&auto=format&fit=crop');
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a;background:#fff}
+    h2{font-family:Montserrat,sans-serif;font-size:28px;margin-bottom:12px}
+    a{text-decoration:none;color:inherit}
+
+    /* ===== Top Bar (로고/타이틀) ===== */
+    .topbar{border-bottom:1px solid var(--border);background:#fff}
+    .topbar-inner{max-width:1200px;margin:0 auto;padding:8px 4%;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+    .logos{display:flex;align-items:center;gap:14px}
+    .logos img{height:32px;object-fit:contain}
+    .lab-title{margin-left:auto;font-family:Montserrat,sans-serif;font-weight:700}
+    .lab-title small{display:block;font-family:"Noto Sans KR",sans-serif;font-weight:600;color:var(--muted);font-size:12px}
+
+    /* ===== Nav ===== */
+    .nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border)}
+    .nav-inner{max-width:1200px;margin:0 auto;padding:0 4%;display:flex;justify-content:space-between;align-items:center;height:52px}
+    .brand{font-family:Montserrat,sans-serif;font-weight:700;font-size:18px}
+    nav a{margin-left:20px;font-weight:600}
+    nav a:hover{color:var(--brand)}
+
+    /* ===== Hero Banner ===== */
+    .hero{
+      position:relative;display:grid;place-items:center;text-align:center;color:#fff;
+      background-image:linear-gradient( to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45) ), var(--hero-img);
+      background-size:cover;background-position:center;
+      min-height:240px;padding:36px 4%;
+    }
+    .hero h1{font-family:Montserrat,sans-serif;font-size:34px;letter-spacing:.2px;margin-bottom:8px}
+    .hero p{opacity:.95}
+
+    /* ===== Main Layout ===== */
+    .wrap{max-width:1200px;margin:24px auto;padding:0 4%}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-    @media (max-width: 980px){.grid{grid-template-columns:1fr}}
-    .section{border:1px solid var(--border);border-radius:14px;padding:12px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+
+    /* ===== Section Card ===== */
+    .section{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff}
     .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
     .controls{display:flex;gap:8px}
     .btn{width:36px;height:36px;border:1px solid var(--border);background:#fff;border-radius:10px;display:inline-grid;place-items:center;cursor:pointer}
     .btn:active{transform:scale(.98)}
     .btn svg{width:18px;height:18px}
-    /* Carousel core */
+
+    /* ===== Carousel ===== */
     .clip{overflow:hidden;border-radius:10px}
     .track{display:flex;gap:var(--gap);will-change:transform;transition:transform .4s ease}
     .card{flex:0 0 calc((100% - var(--gap)*2)/3);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
-    @media (max-width: 1200px){.card{flex-basis:calc((100% - var(--gap))/2)}}
-    @media (max-width: 640px){.card{flex-basis:100%}}
+    @media(max-width:1200px){.card{flex-basis:calc((100% - var(--gap))/2)}}
+    @media(max-width:640px){.card{flex-basis:100%}}
     .thumb{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:#fafafa}
     .thumb img{max-width:82%;max-height:82%}
     .body{padding:12px 14px}
-    .title{font-weight:700;margin:0 0 6px}
+    .title{font-weight:700;margin-bottom:6px}
     .meta{color:var(--muted);font-size:13px}
+
+    /* ===== Notices & Quick Links ===== */
+    .two-col{display:grid;grid-template-columns:1.3fr .7fr;gap:24px}
+    @media(max-width:980px){.two-col{grid-template-columns:1fr}}
+    .notice{border:1px solid var(--border);border-radius:12px;background:#fff}
+    .notice h3{font-family:Montserrat,sans-serif;font-size:20px;padding:12px 14px;border-bottom:1px solid var(--border)}
+    .notice ul{list-style:none;padding:8px 14px}
+    .notice li+li{border-top:1px dashed var(--border)}
+    .notice a{display:flex;align-items:center;justify-content:space-between;padding:10px 2px}
+    .notice time{color:var(--muted);font-size:12px;margin-left:10px;white-space:nowrap}
+
+    .quick{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    @media(max-width:780px){.quick{grid-template-columns:1fr}}
+    .quick a{
+      display:block;border-radius:14px;padding:18px 16px;color:#fff;font-weight:700;
+      box-shadow:0 6px 14px rgba(0,0,0,.12);
+    }
+    .q1{background:linear-gradient(135deg,var(--quick1),#3b82f6)}
+    .q2{background:linear-gradient(135deg,var(--quick2),#22d3ee)}
+    .q3{background:linear-gradient(135deg,var(--quick3),#34d399)}
+    .quick small{display:block;font-weight:600;opacity:.95;margin-top:6px}
+
+    /* ===== Footer (개인정보/연락처) ===== */
+    footer{margin-top:28px;background:var(--footer-bg);color:var(--footer-fg)}
+    .foot-inner{max-width:1200px;margin:0 auto;padding:18px 4%}
+    .foot-top{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(226,232,240,.18);padding-bottom:12px;margin-bottom:12px}
+    .foot-links a{color:var(--footer-fg);opacity:.9;margin-right:14px}
+    .foot-links a:hover{opacity:1;text-decoration:underline}
+    .foot-meta{font-size:13px;opacity:.85;line-height:1.6}
   </style>
 </head>
 <body>
+
+  <!-- 상단 로고/타이틀 -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="logos">
+        <!-- 로고는 형이 파일로 교체: src만 바꾸면 됨 -->
+        <img src="https://dummyimage.com/120x32/cccccc/ffffff&text=NPML" alt="NPML 로고">
+        <img src="https://dummyimage.com/120x32/cccccc/ffffff&text=Univ" alt="대학 로고">
+        <img src="https://dummyimage.com/120x32/cccccc/ffffff&text=College" alt="단과대 로고">
+      </div>
+      <div class="lab-title">
+        Natural Products Metabolomics Lab
+        <small>천연물 대사체 연구실</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- 내비 -->
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand">NPML</div>
+      <nav>
+        <a href="#home">홈</a>
+        <a href="#research-sec">Research</a>
+        <a href="#pubs-sec">Publications</a>
+        <a href="#links-sec">Links</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- 히어로 배너 (이미지는 --hero-img 변수로 변경) -->
+  <section class="hero" id="home">
+    <div>
+      <h1>경희대학교 한의과대학 · 천연물 대사체 연구실</h1>
+      <p>활성성분 동정 · 바이오마커 개발 · 작용기전 규명</p>
+    </div>
+  </section>
+
+  <!-- 메인 두 캐러셀 -->
   <div class="wrap">
     <div class="grid">
       <!-- Research -->
@@ -83,69 +218,103 @@
         </div>
       </section>
     </div>
+
+    <!-- 공지 + 바로가기 -->
+    <section class="two-col" id="links-sec" style="margin-top:24px">
+      <div class="notice">
+        <h3>NOTICES</h3>
+        <ul>
+          <li><a href="#"><span>NPML 홈페이지가 새롭게 오픈했습니다.</span><time>2025-08-12</time></a></li>
+          <li><a href="#"><span>하반기 학부연구생 모집 안내</span><time>2025-08-05</time></a></li>
+          <li><a href="#"><span>세미나: 대사체 기반 바이오마커</span><time>2025-07-30</time></a></li>
+        </ul>
+      </div>
+
+      <div class="quick">
+        <a class="q1" href="#" target="_blank" rel="noopener">
+          GOOGLE DRIVE
+          <small>공용 자료실 바로가기</small>
+        </a>
+        <a class="q2" href="#" target="_blank" rel="noopener">
+          PUBLICATIONS
+          <small>학술 성과 모아보기</small>
+        </a>
+        <a class="q3" href="#" target="_blank" rel="noopener">
+          GALLERY
+          <small>연구실 사진 보기</small>
+        </a>
+      </div>
+    </section>
   </div>
 
+  <!-- 캐러셀 스크립트 -->
   <script>
-    // Iframe-safe carousel: translateX 기반 (scrollBy 미사용)
     (function(){
-      const carousels = document.querySelectorAll('[data-carousel]');
-      carousels.forEach(sec => {
-        const track = sec.querySelector('.track');
-        const cards = Array.from(track.children);
-        const prev = sec.querySelector('[data-prev]');
-        const next = sec.querySelector('[data-next]');
-        let index = 0; // leftmost visible card index
-        let visible = 3; // default, will compute
-        let cardW = 0;
-        let timer = null;
+      const carousels=document.querySelectorAll('[data-carousel]');
+      carousels.forEach(sec=>{
+        const track=sec.querySelector('.track'),
+              cards=Array.from(track.children),
+              prev=sec.querySelector('[data-prev]'),
+              next=sec.querySelector('[data-next]');
+        let index=0,visible=3,cardW=0,timer=null;
 
         function compute(){
-          const clip = sec.querySelector('.clip');
-          const gap = parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
-          // Estimate how many cards fit: check width
-          cardW = cards[0].getBoundingClientRect().width + gap;
-          const total = clip.getBoundingClientRect().width + gap;
-          visible = Math.max(1, Math.round(total / cardW));
-          go(index, false);
+          const clip=sec.querySelector('.clip'),
+                gap=parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
+          cardW=cards[0].getBoundingClientRect().width+gap;
+          const total=clip.getBoundingClientRect().width+gap;
+          visible=Math.max(1,Math.round(total/cardW));
+          go(index,false);
         }
-
-        function go(i, animate=true){
-          const maxIndex = Math.max(0, cards.length - visible);
-          index = Math.min(Math.max(0, i), maxIndex);
-          track.style.transitionDuration = animate ? '.4s' : '0s';
-          track.style.transform = `translateX(${-index * cardW}px)`;
+        function go(i,animate=true){
+          const maxIndex=Math.max(0,cards.length-visible);
+          index=Math.min(Math.max(0,i),maxIndex);
+          track.style.transitionDuration=animate?'.4s':'0s';
+          track.style.transform=`translateX(${-index*cardW}px)`;
         }
+        function step(dir){go(index+dir,true);}
+        prev.addEventListener('click',()=>step(-1));
+        next.addEventListener('click',()=>step(1));
+        window.addEventListener('resize',compute);
 
-        function step(dir){
-          go(index + dir, true);
-        }
-
-        prev.addEventListener('click', () => step(-1));
-        next.addEventListener('click', () => step(+1));
-        window.addEventListener('resize', compute);
-
-        // auto slide (pause on hover/focus for accessibility)
         function startAuto(){
           if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
           stopAuto();
-          timer = setInterval(()=>{
-            const maxIndex = Math.max(0, cards.length - visible);
-            if (index >= maxIndex) { go(0, true); } else { step(+1); }
-          }, 4000);
+          timer=setInterval(()=>{
+            const maxIndex=Math.max(0,cards.length-visible);
+            if(index>=maxIndex){go(0,true);}else{step(1);}
+          },4000);
         }
-        function stopAuto(){ if (timer) { clearInterval(timer); timer = null; } }
-        sec.addEventListener('mouseenter', stopAuto);
-        sec.addEventListener('mouseleave', startAuto);
-        sec.addEventListener('focusin', stopAuto);
-        sec.addEventListener('focusout', startAuto);
+        function stopAuto(){if(timer){clearInterval(timer);timer=null;}}
+        sec.addEventListener('mouseenter',stopAuto);
+        sec.addEventListener('mouseleave',startAuto);
+        sec.addEventListener('focusin',stopAuto);
+        sec.addEventListener('focusout',startAuto);
 
-        // init
-        compute();
-        startAuto();
-        // Recompute after images load (layout shifts)
-        window.addEventListener('load', compute);
+        compute();startAuto();
+        window.addEventListener('load',compute);
       });
     })();
   </script>
+
+  <!-- Footer: 개인정보/연락처 (배경색은 --footer-bg로 변경) -->
+  <footer>
+    <div class="foot-inner">
+      <div class="foot-top">
+        <div class="foot-links">
+          <a href="#">개인정보처리방침</a>
+          <a href="#">이메일무단수집거부</a>
+          <a href="#">CONTACT US</a>
+        </div>
+        <div style="font-family:Montserrat,sans-serif;font-weight:700">NPML</div>
+      </div>
+      <div class="foot-meta">
+        주소: (우) 02447 서울특별시 동대문구 경희대로 26 한의과대학 ○○관 ○○호<br/>
+        Tel: 02-000-0000 · E-mail: npml@example.ac.kr<br/>
+        COPYRIGHT © NPML. ALL RIGHTS RESERVED.
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>
