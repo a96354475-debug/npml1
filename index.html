@@ -36,9 +36,7 @@
       --muted:#475569;          /* 설명글자 */
       --footer-bg:#0f172a;      /* 하단(개인정보/연락처) 배경색 */
       --footer-fg:#e2e8f0;      /* 하단 글자색 */
-      --quick1:#2563eb;         /* 바로가기 카드1 */
-      --quick2:#0ea5e9;         /* 바로가기 카드2 */
-      --quick3:#10b981;         /* 바로가기 카드3 */
+      --quick3:#34d399;         /* 바로가기 카드1 */
       --gap:18px;
 
       /* 히어로 배너 이미지: 나중에 형 파일로 교체 */
@@ -111,13 +109,13 @@
     .notice time{color:var(--muted);font-size:12px;margin-left:10px;white-space:nowrap}
 
     .quick{display:grid;grid-template-columns:1fr;gap:16px}
-    @media(max-width:780px){.quick{grid-template-columns:1fr}}
-    .quick a{
-      display:block;border-radius:14px;padding:18px 16px;color:#fff;font-weight:700;
-      box-shadow:0 6px 14px rgba(0,0,0,.12);
-    }
-    .q1{background:linear-gradient(135deg,var(--quick1),#34d399)}
-    .quick small{display:block;font-weight:600;opacity:.95;margin-top:6px}
+@media(max-width:780px){.quick{grid-template-columns:1fr}}
+.quick a{
+  display:block;border-radius:14px;padding:18px 16px;color:#fff;font-weight:700;
+  box-shadow:0 6px 14px rgba(0,0,0,.12);
+}
+.q3{background:linear-gradient(135deg,var(--quick3),#34d399)} /* ← 한 개만 쓸 스타일 */
+.quick small{display:block;font-weight:600;opacity:.95;margin-top:6px}
 
     /* ===== Footer (개인정보/연락처) ===== */
     footer{margin-top:28px;background:var(--footer-bg);color:var(--footer-fg)}
@@ -228,12 +226,12 @@
         </ul>
       </div>
 
-      <div class="quick">
-        <a class="q3" href="#" target="_blank" rel="noopener">
-          GALLERY
-          <small>연구실 사진 보기</small>
-        </a>
-      </div>
+     <div class="quick">
+  <a class="q3" href="#" target="_blank" rel="noopener">
+    GALLERY
+    <small>연구실 사진 보기</small>
+  </a>
+</div>
     </section>
   </div>
 
