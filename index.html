@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NPML — Carousel (Iframe Safe)</title>
+  <title>NPML — Carousel (Iframe Safe, Auto-Version)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
@@ -33,6 +33,23 @@
     .title{font-weight:700;margin:0 0 6px}
     .meta{color:var(--muted);font-size:13px}
   </style>
+  <script>
+    // 1) Add a one-time version query (?v=YYYYMMDDHHmm) to the page URL (prevents stale HTML cache)
+    (function(){
+      try{
+        var qs = new URLSearchParams(location.search);
+        if(!qs.has('v')){
+          var d = new Date();
+          var pad = n => String(n).padStart(2,'0');
+          var v = d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+pad(d.getHours())+pad(d.getMinutes());
+          qs.set('v', v);
+          var url = location.pathname + '?' + qs.toString() + location.hash;
+          // Single reload to fetch the fresh HTML, then stable.
+          location.replace(url);
+        }
+      }catch(e){/* ignore */}
+    })();
+  </script>
 </head>
 <body>
   <div class="wrap">
@@ -86,7 +103,26 @@
   </div>
 
   <script>
-    // Iframe-safe carousel: translateX 기반 (scrollBy 미사용)
+    // 2) Append ?v=<pageParam> to same-origin images (prevents stale image cache after you replace files in repo)
+    (function(){
+      try{
+        var v = new URLSearchParams(location.search).get('v') || Date.now();
+        document.querySelectorAll('img').forEach(function(img){
+          var src = img.getAttribute('src');
+          if(!src) return;
+          // Only touch relative or same-origin URLs
+          var u = new URL(src, location.href);
+          if(u.origin !== location.origin) return; // external images untouched
+          if(u.search && u.search.includes('v=')) return;
+          u.search += (u.search ? '&' : '?') + 'v=' + v;
+          img.src = u.toString();
+        });
+      }catch(e){/* ignore */}
+    })();
+  </script>
+
+  <script>
+    // Iframe-safe carousel: translateX based (no scrollBy)
     (function(){
       const carousels = document.querySelectorAll('[data-carousel]');
       carousels.forEach(sec => {
@@ -95,14 +131,13 @@
         const prev = sec.querySelector('[data-prev]');
         const next = sec.querySelector('[data-next]');
         let index = 0; // leftmost visible card index
-        let visible = 3; // default, will compute
+        let visible = 3; // compute on init
         let cardW = 0;
         let timer = null;
 
         function compute(){
           const clip = sec.querySelector('.clip');
           const gap = parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
-          // Estimate how many cards fit: check width
           cardW = cards[0].getBoundingClientRect().width + gap;
           const total = clip.getBoundingClientRect().width + gap;
           visible = Math.max(1, Math.round(total / cardW));
@@ -116,15 +151,12 @@
           track.style.transform = `translateX(${-index * cardW}px)`;
         }
 
-        function step(dir){
-          go(index + dir, true);
-        }
+        function step(dir){ go(index + dir, true); }
 
         prev.addEventListener('click', () => step(-1));
         next.addEventListener('click', () => step(+1));
         window.addEventListener('resize', compute);
 
-        // auto slide (pause on hover/focus for accessibility)
         function startAuto(){
           if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
           stopAuto();
@@ -139,10 +171,8 @@
         sec.addEventListener('focusin', stopAuto);
         sec.addEventListener('focusout', startAuto);
 
-        // init
         compute();
         startAuto();
-        // Recompute after images load (layout shifts)
         window.addEventListener('load', compute);
       });
     })();
