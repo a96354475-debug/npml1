@@ -76,43 +76,51 @@ footer{margin-top:28px;background:var(--footer-bg);color:var(--footer-fg)}
 .foot-links a:hover{opacity:1;text-decoration:underline}
 .foot-meta{font-size:13px;opacity:.85;line-height:1.6}
 
-/* === Nav dropdown for Links === */
-.nav { position: sticky; top:0; z-index:50; } /* 이미 있어도 OK */
-.nav-inner { position: relative; }
+/* --- Nav 드롭다운 하드닝 --- */
+.nav nav{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: nowrap;          /* 줄바꿈 금지 */
+  white-space: nowrap;         /* 링크들이 줄바꿈되지 않게 */
+}
 
-.nav-drop { position: relative; display: inline-block; }
-.nav-drop > a { margin-left: 20px; font-weight: 600; } /* 기존 nav a와 간격 맞춤 */
+.nav-inner{ overflow: visible; }  /* 드롭다운이 바깥으로 자연스럽게 나오게 */
+
+.nav-drop{ position: relative; display: inline-block; }
+.nav-drop > a{ margin-left: 20px; font-weight: 600; }
 
 .nav-drop .menu{
   position: absolute;
-  top: 100%; left: 0;
+  top: calc(100% + 8px);
+  left: 0;
   min-width: 140px;
   background: #fff;
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,.08);
   padding: 8px;
-  display: grid; gap: 6px;
-  opacity: 0; transform: translateY(6px);
+  display: grid;
+  gap: 6px;
+
+  /* 기본은 숨김 상태 */
+  opacity: 0;
+  transform: translateY(6px);
   pointer-events: none;
   transition: opacity .15s ease, transform .15s ease;
+  z-index: 100;
 }
 
 .nav-drop .menu a{
   display: block;
   padding: 8px 10px;
   border-radius: 8px;
-  margin: 0;               /* 상단 nav a의 margin-left 무효화 */
+  margin: 0;                /* 상단 nav a의 margin-left 영향 제거 */
   font-weight: 600;
-  white-space: nowrap;
+  white-space: nowrap;       /* 항목 자체도 줄바꿈 금지 */
 }
 
-.nav-drop .menu a:hover{
-  background: #f1f5f9;
-  color: var(--brand);
-}
-
-/* 마우스 올리면/키보드 포커스면 펼치기 */
+/* 펼침 트리거 */
 .nav-drop:hover .menu,
 .nav-drop:focus-within .menu{
   opacity: 1;
@@ -120,5 +128,10 @@ footer{margin-top:28px;background:var(--footer-bg);color:var(--footer-fg)}
   pointer-events: auto;
 }
 
-/* 드롭다운이 다른 요소 위로 나오도록 */
-.nav-drop .menu { z-index: 100; }
+/* 화면이 좁을 때 우측으로 넘치면 자동으로 오른쪽 정렬 */
+@media (max-width: 640px){
+  .nav-drop .menu{
+    left: auto;
+    right: 0;
+  }
+}
