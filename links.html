@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Links — NPML</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 공지 & 바로가기 전용 (index와 동일 톤) */
+    .two-col{display:grid;grid-template-columns:1.3fr .7fr;gap:24px}
+    @media(max-width:980px){.two-col{grid-template-columns:1fr}}
+    .notice{border:1px solid var(--border);border-radius:12px;background:#fff}
+    .notice h3{font-family:Montserrat,sans-serif;font-size:20px;padding:12px 14px;border-bottom:1px solid var(--border)}
+    .notice ul{list-style:none;padding:8px 14px}
+    .notice li+li{border-top:1px dashed var(--border)}
+    .notice a{display:flex;align-items:center;justify-content:space-between;padding:10px 2px}
+    .notice time{color:var(--muted);font-size:12px;margin-left:10px;white-space:nowrap}
+    .quick{display:grid;grid-template-columns:1fr;gap:16px}
+    .quick a{display:block;border-radius:14px;padding:18px 16px;color:#fff;font-weight:700;box-shadow:0 6px 14px rgba(0,0,0,.12)}
+    .q3{background:linear-gradient(135deg,var(--quick3),#34d399)}
+    .quick small{display:block;font-weight:600;opacity:.95;margin-top:6px}
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand">NPML</div>
+      <nav>
+        <a href="index.html">홈</a>
+        <a href="research.html">Research</a>
+        <a href="publications.html">Publications</a>
+        <a href="links.html">Links</a>
+        <a href="people.html">People</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="wrap">
+    <h1>Links & Notices</h1>
+    <section class="two-col" style="margin-top:12px">
+      <div class="notice">
+        <h3>NOTICES</h3>
+        <ul>
+          <li><a href="#"><span>공지 1</span><time>2025-08-12</time></a></li>
+          <li><a href="#"><span>공지 2</span><time>2025-08-05</time></a></li>
+          <li><a href="#"><span>공지 3</span><time>2025-07-30</time></a></li>
+        </ul>
+      </div>
+      <div class="quick">
+        <a class="q3" href="#" target="_blank" rel="noopener">
+          GALLERY
+          <small>연구실 사진 보기</small>
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="foot-inner">
+      <div class="foot-top">
+        <div class="foot-links">
+          <a href="#">개인정보처리방침</a>
+          <a href="#">이메일무단수집거부</a>
+          <a href="#">CONTACT US</a>
+        </div>
+        <div style="font-family:Montserrat,sans-serif;font-weight:700">NPML</div>
+      </div>
+      <div class="foot-meta">
+        주소: (우) 02447 대구광역시 북구 대학로 80 미래융합관 616호<br/>
+        Tel: 02-000-0000 · E-mail: npml@example.ac.kr<br/>
+        COPYRIGHT © NPML. ALL RIGHTS RESERVED.
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
