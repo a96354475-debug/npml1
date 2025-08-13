@@ -19,6 +19,34 @@
     .board tr:hover td{background:#f1f5f9}
     .board .title{color:var(--brand);font-weight:600}
     .tag{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:12px;margin-left:8px}
+
+    /* 현재 메뉴 강조 */
+    .nav a.active{ color: var(--brand); }
+
+    /* 하단 페이지 이동 바(스크롤 시 하단에 달라붙는 sticky bar) */
+    .pager-bar{
+      position: sticky;       /* 이 바까지 스크롤되면 화면 하단에 붙음 */
+      bottom: 0;
+      z-index: 60;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: saturate(120%) blur(6px);
+      border-top: 1px solid var(--border);
+      padding: 10px 12px;
+      margin-top: 16px;
+    }
+    .pager{
+      display:flex;justify-content:center;gap:8px;flex-wrap:wrap;
+    }
+    .pager a,.pager button{
+      display:inline-block;padding:8px 12px;border:1px solid var(--border);
+      border-radius:10px;background:#fff;font-weight:600;cursor:pointer;
+      text-decoration:none;color:inherit;
+    }
+    .pager a:hover,.pager button:hover{ color:var(--brand); border-color:var(--brand); }
+    .pager .active{
+      background:var(--brand); color:#fff; border-color:var(--brand); pointer-events:none;
+    }
+    .pager [aria-disabled="true"]{ opacity:.5; pointer-events:none; }
   </style>
 </head>
 <body>
@@ -29,7 +57,7 @@
       <nav>
         <a href="index.html">홈</a>
         <a href="research.html">Research</a>
-        <a href="publications.html">Publications</a>
+        <a href="publications.html" class="active">Publications</a>
         <a href="links.html">Links</a>
         <a href="people.html">People</a>
       </nav>
@@ -49,43 +77,29 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td><a class="title" href="#" target="_blank" rel="noopener">Paper A: Title Here</a> <span class="tag">IF 7.2</span></td>
-            <td>Journal Name</td>
-            <td>2025</td>
-          </tr>
-          <tr>
-            <td><a class="title" href="#" target="_blank" rel="noopener">Paper B: Title Here</a></td>
-            <td>Journal Name</td>
-            <td>2024</td>
-          </tr>
-          <tr>
-            <td><a class="title" href="#" target="_blank" rel="noopener">Paper C: Title Here</a></td>
-            <td>Journal Name</td>
-            <td>2023</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+          <!-- 상단 몇 개 -->
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Paper A: Title Here</a> <span class="tag">IF 7.2</span></td><td>Journal Name</td><td>2025</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Paper B: Title Here</a></td><td>Journal Name</td><td>2024</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Paper C: Title Here</a></td><td>Journal Name</td><td>2023</td></tr>
 
-  <!-- Footer -->
-  <footer>
-    <div class="foot-inner">
-      <div class="foot-top">
-        <div class="foot-links">
-          <a href="#">개인정보처리방침</a>
-          <a href="#">이메일무단수집거부</a>
-          <a href="#">CONTACT US</a>
-        </div>
-        <div style="font-family:Montserrat,sans-serif;font-weight:700">NPML</div>
-      </div>
-      <div class="foot-meta">
-        주소: (우) 02447 대구광역시 북구 대학로 80 미래융합관 616호<br/>
-        Tel: 02-000-0000 · E-mail: npml@example.ac.kr<br/>
-        COPYRIGHT © NPML. ALL RIGHTS RESERVED.
-      </div>
-    </div>
-  </footer>
-</body>
-</html>
+          <!-- 더미 데이터 대량 추가 (스크롤 충분히 길게) -->
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Targeted metabolomics for biomarker discovery</a></td><td>Metabolomics</td><td>2025</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Phenolic compounds and antioxidant activities in mulberry</a></td><td>Food Chem</td><td>2025</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">LC–MS/MS quantification of flavonoids in Morus alba</a></td><td>J Chromatogr A</td><td>2025</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">NMR-guided structure elucidation of novel chalcones</a></td><td>Phytochemistry</td><td>2025</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Bioassay-guided isolation and mitochondrial targets</a></td><td>Bioorg Med Chem</td><td>2024</td></tr>
+
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Comprehensive profiling of mulberry metabolites</a></td><td>Plant Sci</td><td>2024</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">HILIC vs RP for polar metabolite separation</a></td><td>Anal Chim Acta</td><td>2024</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">QC strategies for high-throughput LC–MS datasets</a></td><td>Anal Chem</td><td>2024</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Ion mobility-assisted annotation in plant extracts</a></td><td>Anal Bioanal Chem</td><td>2024</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Stability of phenolics under sample prep conditions</a></td><td>Food Res Int</td><td>2024</td></tr>
+
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Alignment and batch correction in untargeted data</a></td><td>J Proteome Res</td><td>2023</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Standardization of extract fractionation protocols</a></td><td>J Nat Prod</td><td>2023</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Bioactive fractions against fibrosis pathways</a></td><td>Biochem Pharmacol</td><td>2023</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">MS/MS libraries expansion for natural products</a></td><td>Metabolites</td><td>2023</td></tr>
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">UPLC quantification of catechins in mulberry leaves</a></td><td>Food Anal Methods</td><td>2023</td></tr>
+
+          <!-- 더 길게 -->
+          <tr><td><a class="title" href="#" target="_blank" rel="noopener">Chromatographi_
