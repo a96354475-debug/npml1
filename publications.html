@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Publications — NPML</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* 게시판 스타일 (간단한 논문 리스트) */
+    .board{border:1px solid var(--border);border-radius:12px;background:#fff;overflow:hidden}
+    .board table{width:100%;border-collapse:collapse}
+    .board th,.board td{padding:12px 14px;border-bottom:1px solid var(--border)}
+    .board th{background:#f8fafc;text-align:left}
+    .board tr:hover td{background:#f1f5f9}
+    .board .title{color:var(--brand);font-weight:600}
+    .tag{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:2px 8px;font-size:12px;margin-left:8px}
+  </style>
+</head>
+<body>
+  <!-- Nav -->
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand">NPML</div>
+      <nav>
+        <a href="index.html">홈</a>
+        <a href="research.html">Research</a>
+        <a href="publications.html">Publications</a>
+        <a href="links.html">Links</a>
+        <a href="people.html">People</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="wrap">
+    <h1>Publications</h1>
+    <div class="board">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:60%">제목</th>
+            <th style="width:20%">저널</th>
+            <th style="width:20%">연도</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a class="title" href="#" target="_blank" rel="noopener">Paper A: Title Here</a> <span class="tag">IF 7.2</span></td>
+            <td>Journal Name</td>
+            <td>2025</td>
+          </tr>
+          <tr>
+            <td><a class="title" href="#" target="_blank" rel="noopener">Paper B: Title Here</a></td>
+            <td>Journal Name</td>
+            <td>2024</td>
+          </tr>
+          <tr>
+            <td><a class="title" href="#" target="_blank" rel="noopener">Paper C: Title Here</a></td>
+            <td>Journal Name</td>
+            <td>2023</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="foot-inner">
+      <div class="foot-top">
+        <div class="foot-links">
+          <a href="#">개인정보처리방침</a>
+          <a href="#">이메일무단수집거부</a>
+          <a href="#">CONTACT US</a>
+        </div>
+        <div style="font-family:Montserrat,sans-serif;font-weight:700">NPML</div>
+      </div>
+      <div class="foot-meta">
+        주소: (우) 02447 대구광역시 북구 대학로 80 미래융합관 616호<br/>
+        Tel: 02-000-0000 · E-mail: npml@example.ac.kr<br/>
+        COPYRIGHT © NPML. ALL RIGHTS RESERVED.
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
