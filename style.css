@@ -75,3 +75,50 @@ footer{margin-top:28px;background:var(--footer-bg);color:var(--footer-fg)}
 .foot-links a{color:var(--footer-fg);opacity:.9;margin-right:14px}
 .foot-links a:hover{opacity:1;text-decoration:underline}
 .foot-meta{font-size:13px;opacity:.85;line-height:1.6}
+
+/* === Nav dropdown for Links === */
+.nav { position: sticky; top:0; z-index:50; } /* 이미 있어도 OK */
+.nav-inner { position: relative; }
+
+.nav-drop { position: relative; display: inline-block; }
+.nav-drop > a { margin-left: 20px; font-weight: 600; } /* 기존 nav a와 간격 맞춤 */
+
+.nav-drop .menu{
+  position: absolute;
+  top: 100%; left: 0;
+  min-width: 140px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  padding: 8px;
+  display: grid; gap: 6px;
+  opacity: 0; transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.nav-drop .menu a{
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin: 0;               /* 상단 nav a의 margin-left 무효화 */
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.nav-drop .menu a:hover{
+  background: #f1f5f9;
+  color: var(--brand);
+}
+
+/* 마우스 올리면/키보드 포커스면 펼치기 */
+.nav-drop:hover .menu,
+.nav-drop:focus-within .menu{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* 드롭다운이 다른 요소 위로 나오도록 */
+.nav-drop .menu { z-index: 100; }
