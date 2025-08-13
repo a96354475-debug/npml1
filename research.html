@@ -41,6 +41,55 @@
       font-size: 13px;
       white-space: nowrap;
     }
+
+    /* === 하단 페이지 이동 바(스크롤 시 하단에 달라붙는 sticky bar) === */
+.pager-bar {
+  position: sticky;       /* 화면 하단에 달라붙음 */
+  bottom: 0;
+  z-index: 60;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: saturate(120%) blur(6px);
+  border-top: 1px solid var(--border);
+  padding: 10px 12px;
+  margin-top: 16px;       /* 위 콘텐츠와 간격 */
+}
+
+.pager {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pager a, .pager button {
+  display: inline-block;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.pager a:hover, .pager button:hover {
+  color: var(--brand);
+  border-color: var(--brand);
+}
+
+.pager .active {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+  pointer-events: none;
+}
+
+.pager [aria-disabled="true"] {
+  opacity: .5;
+  pointer-events: none;
+}
+
   </style>
 </head>
 <body>
@@ -90,6 +139,19 @@
         </tbody>
       </table>
     </div>
+    <!-- 하단 페이지 이동 바 -->
+<nav class="pager-bar" aria-label="페이지 이동">
+  <div class="pager">
+    <a href="#" aria-disabled="true">이전</a>
+    <a href="#" class="active" aria-current="page">1</a>
+    <a href="#">2</a>
+    <a href="#">3</a>
+    <a href="#">4</a>
+    <a href="#">5</a>
+    <button type="button">더보기</button>
+    <a href="#">다음</a>
+  </div>
+</nav>
   </div>
 
   <!-- Footer -->
