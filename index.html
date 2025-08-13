@@ -25,94 +25,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+  <!-- css 연결 -->
+  <link rel="stylesheet" href="style.css">
 
-  <style>
-    /* ===== Theme (한곳에서 색/배경/배너이미지 변경) ===== */
-    :root{
-      --brand:#004A9F;          /* 포인트 */
-      --border:#e5e7eb;         /* 테두리 */
-      --muted:#475569;          /* 보조 글자색 */
-      --footer-bg:#0f172a;      /* 푸터 배경 */
-      --footer-fg:#e2e8f0;      /* 푸터 글자색 */
-      --quick3:#34d399;         /* 바로가기 카드 색 */
-      --gap:18px;               /* 캐러셀 카드 간격 */
-      /* 히어로 배너 배경 이미지 (src만 교체) */
-      --hero-img:url('https://images.unsplash.com/photo-1527477396000-e27163b481c2?q=80&w=1600&auto=format&fit=crop');
-    }
-
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a;background:#fff}
-    h2{font-family:Montserrat,sans-serif;font-size:28px;margin-bottom:12px}
-    a{text-decoration:none;color:inherit}
-
-    /* ===== Top Bar ===== */
-    .topbar{border-bottom:1px solid var(--border);background:#fff}
-    .topbar-inner{max-width:1200px;margin:0 auto;padding:8px 4%;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-    .logos{display:flex;align-items:center;gap:14px}
-    .logos img{height:32px;object-fit:contain}
-    .lab-title{margin-left:auto;font-family:Montserrat,sans-serif;font-weight:700}
-    .lab-title small{display:block;font-family:"Noto Sans KR",sans-serif;font-weight:600;color:var(--muted);font-size:12px}
-
-    /* ===== Nav ===== */
-    .nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border)}
-    .nav-inner{max-width:1200px;margin:0 auto;padding:0 4%;display:flex;justify-content:space-between;align-items:center;height:52px}
-    .brand{font-family:Montserrat,sans-serif;font-weight:700;font-size:18px}
-    nav a{margin-left:20px;font-weight:600}
-    nav a:hover{color:var(--brand)}
-
-    /* ===== Hero ===== */
-    .hero{position:relative;display:grid;place-items:center;text-align:center;color:#fff;background-image:linear-gradient( to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45) ), var(--hero-img);background-size:cover;background-position:center;min-height:240px;padding:36px 4%}
-    .hero h1{font-family:Montserrat,sans-serif;font-size:34px;letter-spacing:.2px;margin-bottom:8px}
-    .hero p{opacity:.95}
-
-    /* ===== Layout ===== */
-    .wrap{max-width:1200px;margin:24px auto;padding:0 4%}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
-
-    /* ===== Section Card ===== */
-    .section{border:1px solid var(--border);border-radius:14px;padding:12px;background:#fff}
-    .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    .controls{display:flex;gap:8px}
-    .btn{width:36px;height:36px;border:1px solid var(--border);background:#fff;border-radius:10px;display:inline-grid;place-items:center;cursor:pointer}
-    .btn:active{transform:scale(.98)}
-    .btn svg{width:18px;height:18px}
-
-    /* ===== Carousel ===== */
-    .clip{overflow:hidden;border-radius:10px}
-    .track{display:flex;gap:var(--gap);will-change:transform;transition:transform .4s ease}
-    .card{flex:0 0 calc((100% - var(--gap)*2)/3);border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
-    @media(max-width:1200px){.card{flex-basis:calc((100% - var(--gap))/2)}}
-    @media(max-width:640px){.card{flex-basis:100%}}
-    .thumb{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:#fafafa}
-    .thumb img{max-width:82%;max-height:82%}
-    .body{padding:12px 14px}
-    .title{font-weight:700;margin-bottom:6px}
-    .meta{color:var(--muted);font-size:13px}
-
-    /* ===== Notices & Quick Links ===== */
-    .two-col{display:grid;grid-template-columns:1.3fr .7fr;gap:24px}
-    @media(max-width:980px){.two-col{grid-template-columns:1fr}}
-    .notice{border:1px solid var(--border);border-radius:12px;background:#fff}
-    .notice h3{font-family:Montserrat,sans-serif;font-size:20px;padding:12px 14px;border-bottom:1px solid var(--border)}
-    .notice ul{list-style:none;padding:8px 14px}
-    .notice li+li{border-top:1px dashed var(--border)}
-    .notice a{display:flex;align-items:center;justify-content:space-between;padding:10px 2px}
-    .notice time{color:var(--muted);font-size:12px;margin-left:10px;white-space:nowrap}
-
-    .quick{display:grid;grid-template-columns:1fr;gap:16px}
-    .quick a{display:block;border-radius:14px;padding:18px 16px;color:#fff;font-weight:700;box-shadow:0 6px 14px rgba(0,0,0,.12)}
-    .q3{background:linear-gradient(135deg,var(--quick3),#34d399)}
-    .quick small{display:block;font-weight:600;opacity:.95;margin-top:6px}
-
-    /* ===== Footer ===== */
-    footer{margin-top:28px;background:var(--footer-bg);color:var(--footer-fg)}
-    .foot-inner{max-width:1200px;margin:0 auto;padding:18px 4%}
-    .foot-top{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(226,232,240,.18);padding-bottom:12px;margin-bottom:12px}
-    .foot-links a{color:var(--footer-fg);opacity:.9;margin-right:14px}
-    .foot-links a:hover{opacity:1;text-decoration:underline}
-    .foot-meta{font-size:13px;opacity:.85;line-height:1.6}
-  </style>
 </head>
 <body>
 
