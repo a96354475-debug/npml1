@@ -76,23 +76,57 @@ footer{margin-top:28px;background:var(--footer-bg);color:var(--footer-fg)}
 .foot-links a:hover{opacity:1;text-decoration:underline}
 .foot-meta{font-size:13px;opacity:.85;line-height:1.6}
 
-/* --- Nav 드롭다운 하드닝 --- */
-.nav nav{
+/* ===== Nav ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 52px;
+  overflow: visible; /* 드롭다운이 바깥으로 자연스럽게 나오게 */
+}
+.brand {
+  font-family: Montserrat, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+.nav nav {
   display: flex;
   align-items: center;
   gap: 20px;
-  flex-wrap: nowrap;          /* 줄바꿈 금지 */
-  white-space: nowrap;         /* 링크들이 줄바꿈되지 않게 */
+  flex-wrap: nowrap;  /* 줄바꿈 금지 */
+  white-space: nowrap; /* 링크들이 줄바꿈되지 않게 */
+}
+nav a {
+  margin-left: 20px;
+  font-weight: 600;
+}
+nav a:hover {
+  color: var(--brand);
 }
 
-.nav-inner{ overflow: visible; }  /* 드롭다운이 바깥으로 자연스럽게 나오게 */
-
-.nav-drop{ position: relative; display: inline-block; }
-.nav-drop > a{ margin-left: 20px; font-weight: 600; }
-
-.nav-drop .menu{
+/* 드롭다운 */
+.nav-drop {
+  position: relative;
+  display: inline-block;
+}
+.nav-drop > a {
+  margin-left: 20px;
+  font-weight: 600;
+}
+.nav-drop .menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: 100%;
+  margin-top: 8px; /* 시각적 간격 */
   left: 0;
   min-width: 140px;
   background: #fff;
@@ -102,35 +136,38 @@ footer{margin-top:28px;background:var(--footer-bg);color:var(--footer-fg)}
   padding: 8px;
   display: grid;
   gap: 6px;
-
-  /* 기본은 숨김 상태 */
   opacity: 0;
   transform: translateY(6px);
   pointer-events: none;
   transition: opacity .15s ease, transform .15s ease;
   z-index: 100;
 }
-
-.nav-drop .menu a{
+/* hover-bridge */
+.nav-drop .menu::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -8px; /* gap 높이 */
+  height: 8px;
+}
+.nav-drop .menu a {
   display: block;
   padding: 8px 10px;
   border-radius: 8px;
-  margin: 0;                /* 상단 nav a의 margin-left 영향 제거 */
+  margin: 0;
   font-weight: 600;
-  white-space: nowrap;       /* 항목 자체도 줄바꿈 금지 */
+  white-space: nowrap;
 }
-
-/* 펼침 트리거 */
 .nav-drop:hover .menu,
-.nav-drop:focus-within .menu{
+.nav-drop:focus-within .menu {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
 }
-
-/* 화면이 좁을 때 우측으로 넘치면 자동으로 오른쪽 정렬 */
-@media (max-width: 640px){
-  .nav-drop .menu{
+/* 좁은 화면에서 자동 오른쪽 정렬 */
+@media (max-width: 640px) {
+  .nav-drop .menu {
     left: auto;
     right: 0;
   }
