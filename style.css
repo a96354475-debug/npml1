@@ -7,9 +7,6 @@
   --footer-fg:#e2e8f0;      /* 푸터 글자색 */
   --quick3:#34d399;         /* 바로가기 카드 색 */
   --gap:18px;               /* 캐러셀 카드 간격 */
-  /* 히어로 배너 배경 이미지 (src만 교체) */
-  --hero-img:url('https://images.unsplash.com/photo-1527477396000-e27163b481c2?q=80&w=1600&auto=format&fit=crop');
-}
 
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a;background:#fff}
@@ -30,11 +27,6 @@ a{text-decoration:none;color:inherit}
 .brand{font-family:Montserrat,sans-serif;font-weight:700;font-size:18px}
 nav a{margin-left:20px;font-weight:600}
 nav a:hover{color:var(--brand)}
-
-/* ===== Hero ===== */
-.hero{position:relative;display:grid;place-items:center;text-align:center;color:#fff;background-image:linear-gradient( to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45) ), var(--hero-img);background-size:cover;background-position:center;min-height:240px;padding:36px 4%}
-.hero h1{font-family:Montserrat,sans-serif;font-size:34px;letter-spacing:.2px;margin-bottom:8px}
-.hero p{opacity:.95}
 
 /* ===== Layout ===== */
 .wrap{max-width:1200px;margin:24px auto;padding:0 4%}
