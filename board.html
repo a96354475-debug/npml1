@@ -15,5 +15,27 @@
     <p>여긴 게시판 페이지야. 다음 단계에서 로그인/글쓰기 붙일 거임.</p>
     <p><a href="index.html">← 홈으로</a></p>
   </div>
+  <!-- Firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+<script>
+  // 🔑 네 Firebase 콘솔에서 복사한 설정으로 바꾸기
+  const firebaseConfig = {
+    apiKey: "AIzaSyAS6p4h09vtAlho4eztwStPaYNO0rc6iOQ",
+    authDomain: "npmlsite.firebaseapp.com",
+    projectId: "npmlsite",
+    storageBucket: "npmlsite.firebasestorage.app",
+    messagingSenderId: "186697073652",
+    appId: "1:186697073652:web:95a7d17c736a0d95ffafa1"
+  };
+
+  // Firebase 초기화
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  console.log("✅ Firebase 연결 완료");
+</script>
+
 </body>
 </html>
