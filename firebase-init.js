@@ -1,28 +1,20 @@
 // firebase-init.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {
-  getFirestore, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { getFirestore, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-// ⬇⬇ 이 부분에 콘솔에서 보여준 config를 그대로 붙여넣어
 export const firebaseConfig = {
-  apiKey: "AIzaSyAS6p4h09vtAlho4eztwStPaYNO0rc6iOQ",
+  apiKey: "AIzaSyA6p4h89vtAlho4eztwStPaYN0ORc6i0Q",
   authDomain: "npmlsite.firebaseapp.com",
   projectId: "npmlsite",
-  storageBucket: "npmlsite.firebasestorage.com",
+  storageBucket: "npmlsite.appspot.com",
   messagingSenderId: "186697073652",
   appId: "1:186697073652:web:95a7d17c736a0d95ffafa1"
 };
 
-
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
-
-// Firestore
 export const db = getFirestore(app);
 export const ts = () => serverTimestamp();
 
