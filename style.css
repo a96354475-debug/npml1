@@ -172,3 +172,30 @@ nav a:hover {
     right: 0;
   }
 }
+/* ===== “+” 더보기 버튼 공통 ===== */
+.more{
+  display:inline-flex;
+  width:28px; height:28px;
+  border-radius:9999px;
+  border:1px solid var(--border, #e5e7eb);
+  align-items:center; justify-content:center;
+  font-size:18px; line-height:1;
+  text-decoration:none;
+  color:#0f172a; background:#fff;
+}
+.more:hover{ background:#f8fafc; }
+.more:active{ transform:translateY(1px); }
+.more:focus-visible{ outline:2px solid #3b82f6; outline-offset:2px; }
+
+/* 캐러셀 헤더 오른쪽 정렬용: 화살표들과 나란히 배치 */
+.head .controls{
+  display:flex; align-items:center; gap:8px;
+}
+
+/* Notices 섹션 타이틀+플러스 정렬용 */
+.sec-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px;
+}
+.sec-head h3{ margin:0; }
+
