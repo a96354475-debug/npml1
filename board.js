@@ -3,7 +3,7 @@
 // Firebase 모듈 불러오기 (init에서 export한 것들)
 import {
   auth, provider, signInWithPopup, signOut, onAuthStateChanged, db
-} from './firebase-init.js';
+} from './firebase-init.js?v=20250814';
 
 // Firestore 함수 불러오기
 import {
