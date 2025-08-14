@@ -1,28 +1,32 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NPML — Natural Products Metabolomics Lab</title>
 
-  <!-- 폰트 -->
+  <!-- Google Fonts (Montserrat / Noto Sans KR) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
-  <!-- css 연결 -->
+
+  <!-- 로컬 CSS 연결 -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- 캐시 우회 -->
+  <!-- 캐시 초기화 스크립트 (페이지 로드 시 CSS 최신 버전 로드) -->
   <script>
   (function(){
     try{
       const p=n=>String(n).padStart(2,'0');
       const now=new Date();
-      const kr=new Date(now.getTime()+9*3600*1000);
+      const kr=new Date(now.getTime()+9*3600*1000); // KST 적용
       const ver=kr.getUTCFullYear()+p(kr.getUTCMonth()+1)+p(kr.getUTCDate())+'-'+p(kr.getUTCHours())+p(kr.getUTCMinutes())+p(kr.getUTCSeconds());
+
       const url=new URL(location.href);
       const hasV=url.searchParams.has('v');
       const v = hasV ? url.searchParams.get('v') : ver;
+
+      // 로컬 CSS만 버전 파라미터 붙이기
       document.querySelectorAll('link[rel="stylesheet"]').forEach(link=>{
         const u = new URL(link.href, location.href);
         if(u.origin === location.origin){
@@ -30,6 +34,8 @@
           link.href = u.toString();
         }
       });
+
+      // 현재 페이지 URL에 v 파라미터 없으면 추가
       if(!hasV){
         url.searchParams.set('v', v);
         location.replace(url.toString());
@@ -37,19 +43,10 @@
     }catch(e){ console.warn('cachebuster failed', e); }
   })();
   </script>
-
-  <style>
-    .more{display:inline-flex;width:28px;height:28px;border-radius:50%;border:1px solid var(--border,#e5e7eb);align-items:center;justify-content:center;font-size:18px;color:#0f172a;background:#fff;text-decoration:none}
-    .more:hover{background:#f8fafc}
-    .more:active{transform:translateY(1px)}
-    .more:focus-visible{outline:2px solid #3b82f6;outline-offset:2px}
-    .head .controls{display:flex;align-items:center;gap:8px}
-    .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-    .sec-head h3{margin:0}
-  </style>
 </head>
+
 <body>
-  <!-- 내비 -->
+  <!-- 상단 내비게이션 -->
   <div class="nav">
     <div class="nav-inner">
       <div class="brand">NPML</div>
@@ -57,13 +54,15 @@
         <a href="index.html">홈</a>
         <a href="research.html">Research</a>
         <a href="publications.html">Publications</a>
+        <!-- ▼ Links 드롭다운 -->
         <span class="nav-drop">
-          <a href="links.html">Links</a>
-          <span class="menu">
-            <a href="links.html#notices">공지</a>
-            <a href="links.html#gallery">갤러리</a>
+          <a href="links.html" aria-haspopup="true" aria-expanded="false">Links</a>
+          <span class="menu" role="menu">
+            <a href="links.html#notices" role="menuitem">공지</a>
+            <a href="links.html#gallery" role="menuitem">갤러리</a>
           </span>
         </span>
+        <!-- ▲ 드롭다운 끝 -->
         <a href="people.html">People</a>
       </nav>
     </div>
@@ -77,109 +76,124 @@
     </div>
   </section>
 
-  <!-- Research -->
-  <section class="section" data-carousel id="research-sec">
-    <div class="head">
-      <h2>Research Topics</h2>
-      <div class="controls">
-        <button class="btn" data-prev>◀</button>
-        <button class="btn" data-next>▶</button>
-        <a class="more" href="research.html">+</a>
-      </div>
-    </div>
-    <div class="clip">
-      <div class="track">
-        <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/a/640/360"></div><div class="body"><h3>천연물 약리기전</h3><div class="meta">활성 성분 분리·동정</div></div></article>
-        <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/b/640/360"></div><div class="body"><h3>대사체 바이오마커</h3><div class="meta">LC–MS/NMR</div></div></article>
-        <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/c/640/360"></div><div class="body"><h3>에너지 대사·섬유화</h3><div class="meta">미토콘드리아 타깃</div></div></article>
-        <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/d/640/360"></div><div class="body"><h3>신규 화합물</h3><div class="meta">구조·기전 규명</div></div></article>
-      </div>
-    </div>
-  </section>
+  <!-- 메인 콘텐츠 -->
+  <div class="wrap">
+    <div class="grid">
+      <!-- Research Carousel -->
+      <section class="section" data-carousel id="research-sec">
+        <div class="head">
+          <h2>Research Topics</h2>
+          <div class="controls">
+            <button class="btn" data-prev aria-label="이전">
+              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="btn" data-next aria-label="다음">
+              <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="clip">
+          <div class="track">
+            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/a/640/360" alt=""></div><div class="body"><h3 class="title">천연물 약리기전</h3><div class="meta">활성 성분 분리·동정</div></div></article>
+            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/b/640/360" alt=""></div><div class="body"><h3 class="title">대사체 바이오마커</h3><div class="meta">LC–MS/NMR</div></div></article>
+            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/c/640/360" alt=""></div><div class="body"><h3 class="title">에너지 대사·섬유화</h3><div class="meta">미토콘드리아 타깃</div></div></article>
+            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/d/640/360" alt=""></div><div class="body"><h3 class="title">신규 화합물</h3><div class="meta">구조·기전 규명</div></div></article>
+          </div>
+        </div>
+      </section>
 
-  <!-- Publications -->
-  <section class="section" data-carousel id="pubs-sec">
-    <div class="head">
-      <h2>Recent Publications</h2>
-      <div class="controls">
-        <button class="btn" data-prev>◀</button>
-        <button class="btn" data-next>▶</button>
-        <a class="more" href="publications.html">+</a>
-      </div>
+      <!-- Publications Carousel -->
+      <section class="section" data-carousel id="pubs-sec">
+        <div class="head">
+          <h2>Recent Publications</h2>
+          <div class="controls">
+            <button class="btn" data-prev aria-label="이전">
+              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="btn" data-next aria-label="다음">
+              <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="clip">
+          <div class="track">
+            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/e/640/360" alt=""></div><div class="body"><h3 class="title">Paper A</h3><div class="meta">Journal · 2025</div></div></article>
+            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/f/640/360" alt=""></div><div class="body"><h3 class="title">Paper B</h3><div class="meta">Journal · 2024</div></div></article>
+            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/g/640/360" alt=""></div><div class="body"><h3 class="title">Paper C</h3><div class="meta">Journal · 2023</div></div></article>
+            <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/h/640/360" alt=""></div><div class="body"><h3 class="title">Paper D</h3><div class="meta">Journal · 2022</div></div></article>
+          </div>
+        </div>
+      </section>
     </div>
-    <div class="clip">
-      <div class="track">
-        <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/e/640/360"></div><div class="body"><h3>Paper A</h3><div class="meta">Journal · 2025</div></div></article>
-        <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/f/640/360"></div><div class="body"><h3>Paper B</h3><div class="meta">Journal · 2024</div></div></article>
-        <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/g/640/360"></div><div class="body"><h3>Paper C</h3><div class="meta">Journal · 2023</div></div></article>
-        <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/h/640/360"></div><div class="body"><h3>Paper D</h3><div class="meta">Journal · 2022</div></div></article>
-      </div>
-    </div>
-  </section>
 
-  <!-- Notices -->
-  <section class="two-col" id="links-sec">
-    <div class="notice">
-      <div class="sec-head">
+    <!-- 공지 & 바로가기 -->
+    <section class="two-col" id="links-sec" style="margin-top:24px">
+      <div class="notice">
         <h3>NOTICES</h3>
-        <a class="more" href="links.html#notices">+</a>
+        <ul>
+          <li><a href="#"><span>공지 1</span><time>2025-08-12</time></a></li>
+          <li><a href="#"><span>공지 2</span><time>2025-08-05</time></a></li>
+          <li><a href="#"><span>공지 3</span><time>2025-07-30</time></a></li>
+        </ul>
       </div>
-      <ul>
-        <li><a href="#"><span>공지 1</span><time>2025-08-12</time></a></li>
-        <li><a href="#"><span>공지 2</span><time>2025-08-05</time></a></li>
-        <li><a href="#"><span>공지 3</span><time>2025-07-30</time></a></li>
-      </ul>
-    </div>
-    <div class="quick">
-      <a class="q3" href="#">GALLERY<small>연구실 사진 보기</small></a>
-    </div>
-  </section>
+      <div class="quick">
+        <a class="q3" href="#" target="_blank" rel="noopener">
+          GALLERY <small>연구실 사진 보기</small>
+        </a>
+      </div>
+    </section>
+  </div>
 
-  <!-- 캐러셀 스크립트 -->
+  <!-- 캐러셀 동작 스크립트 -->
   <script>
-    (function(){
-      document.querySelectorAll('[data-carousel]').forEach(sec=>{
-        const track=sec.querySelector('.track');
-        const cards=[...track.children];
-        const prev=sec.querySelector('[data-prev]');
-        const next=sec.querySelector('[data-next]');
-        let index=0,visible=3,cardW=0,timer=null;
-        function compute(){
-          const clip=sec.querySelector('.clip');
-          const gap=parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
-          cardW=cards[0].getBoundingClientRect().width+gap;
-          const total=clip.getBoundingClientRect().width+gap;
-          visible=Math.max(1,Math.round(total/cardW));
-          go(index,false);
-        }
-        function go(i,animate=true){
+  (function(){
+    document.querySelectorAll('[data-carousel]').forEach(sec=>{
+      const track=sec.querySelector('.track');
+      const cards=[...track.children];
+      const prev=sec.querySelector('[data-prev]');
+      const next=sec.querySelector('[data-next]');
+      let index=0,visible=3,cardW=0,timer=null;
+
+      function compute(){
+        const clip=sec.querySelector('.clip');
+        const gap=parseFloat(getComputedStyle(track).getPropertyValue('--gap')||18);
+        cardW=cards[0].getBoundingClientRect().width+gap;
+        const total=clip.getBoundingClientRect().width+gap;
+        visible=Math.max(1,Math.round(total/cardW));
+        go(index,false);
+      }
+      function go(i,animate=true){
+        const maxIndex=Math.max(0,cards.length-visible);
+        index=Math.min(Math.max(0,i),maxIndex);
+        track.style.transitionDuration=animate?'.4s':'0s';
+        track.style.transform=`translateX(${-index*cardW}px)`;
+      }
+      function step(dir){go(index+dir,true);}
+
+      prev.addEventListener('click',()=>step(-1));
+      next.addEventListener('click',()=>step(1));
+      window.addEventListener('resize',compute);
+
+      function startAuto(){
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        stopAuto();
+        timer=setInterval(()=>{
           const maxIndex=Math.max(0,cards.length-visible);
-          index=Math.min(Math.max(0,i),maxIndex);
-          track.style.transitionDuration=animate?'.4s':'0s';
-          track.style.transform=`translateX(${-index*cardW}px)`;
-        }
-        function step(dir){go(index+dir,true);}
-        prev.addEventListener('click',()=>step(-1));
-        next.addEventListener('click',()=>step(1));
-        window.addEventListener('resize',compute);
-        function startAuto(){
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-          stopAuto();
-          timer=setInterval(()=>{
-            const maxIndex=Math.max(0,cards.length-visible);
-            index>=maxIndex?go(0,true):step(1);
-          },4000);
-        }
-        function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
-        sec.addEventListener('mouseenter',stopAuto);
-        sec.addEventListener('mouseleave',startAuto);
-        sec.addEventListener('focusin',stopAuto);
-        sec.addEventListener('focusout',startAuto);
-        compute();
-        startAuto();
-        window.addEventListener('load',compute);
-      });
-    })();
+          index>=maxIndex?go(0,true):step(1);
+        },4000);
+      }
+      function stopAuto(){ if(timer){ clearInterval(timer); timer=null; } }
+
+      sec.addEventListener('mouseenter',stopAuto);
+      sec.addEventListener('mouseleave',startAuto);
+      sec.addEventListener('focusin',stopAuto);
+      sec.addEventListener('focusout',startAuto);
+
+      compute();
+      startAuto();
+      window.addEventListener('load',compute);
+    });
+  })();
   </script>
 
   <!-- Footer -->
@@ -194,8 +208,8 @@
         <div style="font-family:Montserrat,sans-serif;font-weight:700">NPML</div>
       </div>
       <div class="foot-meta">
-        주소: (우) 41566 대구광역시 북구 대학로 80 미래융합관 616호<br>
-        Tel: 02-000-0000 · E-mail: npml@example.ac.kr<br>
+        주소: (우) 41566 대구광역시 북구 대학로 80 미래융합관 616호<br/>
+        Tel: 02-000-0000 · E-mail: npml@example.ac.kr<br/>
         COPYRIGHT © NPML. ALL RIGHTS RESERVED.
       </div>
     </div>
