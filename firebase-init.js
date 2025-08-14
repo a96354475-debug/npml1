@@ -3,6 +3,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ⬇⬇ 이 부분에 콘솔에서 보여준 config를 그대로 붙여넣어
 export const firebaseConfig = {
@@ -17,4 +20,9 @@ export const firebaseConfig = {
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
+
+// Firestore
+export const db = getFirestore(app);
+export const ts = () => serverTimestamp();
+
 export { signInWithPopup, signOut, onAuthStateChanged };
