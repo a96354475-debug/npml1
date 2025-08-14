@@ -10,29 +10,50 @@
     .muted{color:#64748b}
     #authBox{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin:16px 0}
     #loginBtn,#logoutBtn{border:1px solid #e5e7eb;border-radius:10px;padding:8px 12px;background:#f8fafc;cursor:pointer}
+
+    form.board{display:grid;gap:8px;margin:16px 0 24px}
+    input, textarea, button{font:inherit}
+    input, textarea{border:1px solid #e5e7eb;border-radius:10px;padding:10px}
+    textarea{min-height:120px;resize:vertical}
+    button.btn{border:1px solid #e5e7eb;border-radius:10px;padding:10px 14px;cursor:pointer;background:#f8fafc}
+    button.delete{border-color:#fecaca;background:#fff0f0}
+
+    .card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:12px;background:#fff}
+    .card h3{margin:0 0 6px}
+    .meta{font-size:12px;color:#64748b;margin-bottom:8px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1>게시판</h1>
 
-    <!-- ✅ 로그인 UI -->
+    <!-- 로그인 UI -->
     <div id="authBox">
       <span id="userInfo" class="muted">로그인 안 됨</span>
       <button id="loginBtn">Google 로그인</button>
       <button id="logoutBtn" style="display:none">로그아웃</button>
     </div>
 
-    <p>여긴 게시판 페이지야. 다음 단계에서 글쓰기/삭제 붙일 거임.</p>
-    <p><a href="index.html">← 홈으로</a></p>
+    <!-- 글쓰기 (로그인 시 노출) -->
+    <form class="board" id="postForm" style="display:none">
+      <input id="title" placeholder="제목" maxlength="100" required />
+      <textarea id="content" placeholder="내용" maxlength="5000" required></textarea>
+      <button class="btn" type="submit">등록</button>
+    </form>
+
+    <!-- 목록 -->
+    <div id="list"></div>
+
+    <p style="margin-top:20px"><a href="index.html">← 홈으로</a></p>
   </div>
 
   <!-- Firebase CDN -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <script>
-    // 🔑 네 Firebase 콘솔에서 복사한 설정 (이미 제공한 값 사용)
+    // 🔑 네 Firebase 콘솔 설정값
     const firebaseConfig = {
       apiKey: "AIzaSyAS6p4h09vtAlho4eztwStPaYNO0rc6iOQ",
       authDomain: "npmlsite.firebaseapp.com",
@@ -45,39 +66,115 @@
     // Firebase 초기화
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    console.log("✅ Firebase 연결 완료");
+    const db   = firebase.firestore();
 
-    // ✅ Google 로그인/로그아웃 로직
-    const provider = new firebase.auth.GoogleAuthProvider();
+    // DOM 참조
     const loginBtn  = document.getElementById('loginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const userInfo  = document.getElementById('userInfo');
+    const postForm  = document.getElementById('postForm');
+    const titleEl   = document.getElementById('title');
+    const contentEl = document.getElementById('content');
+    const listEl    = document.getElementById('list');
 
+    // Google 로그인/로그아웃
+    const provider = new firebase.auth.GoogleAuthProvider();
     loginBtn.addEventListener('click', () => {
-      auth.signInWithPopup(provider).catch(err => {
-        alert('로그인 실패: ' + err.message);
-        console.error(err);
-      });
+      auth.signInWithPopup(provider).catch(err => alert('로그인 실패: ' + err.message));
     });
-
     logoutBtn.addEventListener('click', () => {
-      auth.signOut().catch(err => {
-        alert('로그아웃 실패: ' + err.message);
-        console.error(err);
-      });
+      auth.signOut().catch(err => alert('로그아웃 실패: ' + err.message));
     });
 
+    // 상태 변경
+    let currentUser = null;
     auth.onAuthStateChanged(user => {
+      currentUser = user || null;
       if (user) {
         userInfo.textContent = `${user.displayName || '사용자'} (${user.email})`;
         loginBtn.style.display  = 'none';
         logoutBtn.style.display = 'inline-block';
+        postForm.style.display  = 'grid';
       } else {
         userInfo.textContent = '로그인 안 됨';
         loginBtn.style.display  = 'inline-block';
         logoutBtn.style.display = 'none';
+        postForm.style.display  = 'none';
       }
     });
+
+    // 글 등록
+    postForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentUser) { alert('로그인이 필요합니다.'); return; }
+      const title = titleEl.value.trim();
+      const content = contentEl.value.trim();
+      if (!title || !content) return;
+
+      try {
+        await db.collection('posts').add({
+          title,
+          content,
+          uid: currentUser.uid,
+          author: currentUser.displayName || currentUser.email || '익명',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        titleEl.value = '';
+        contentEl.value = '';
+      } catch (err) {
+        alert('등록 실패: ' + err.message);
+        console.error(err);
+      }
+    });
+
+    // 목록 실시간 구독
+    db.collection('posts')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((snap) => {
+        listEl.innerHTML = '';
+        snap.forEach(doc => {
+          const d = doc.data();
+          const id = doc.id;
+          const ts = d.createdAt?.toDate ? d.createdAt.toDate() : null;
+          const when = ts ? new Date(ts).toLocaleString() : '작성중…';
+
+          const card = document.createElement('article');
+          card.className = 'card';
+          card.innerHTML = `
+            <h3>${escapeHtml(d.title || '')}</h3>
+            <div class="meta">${escapeHtml(d.author || '익명')} · <span>${when}</span></div>
+            <div class="body">${nl2br(escapeHtml(d.content || ''))}</div>
+          `;
+
+          // 내 글이면 삭제 버튼
+          if (auth.currentUser && d.uid === auth.currentUser.uid) {
+            const del = document.createElement('button');
+            del.textContent = '삭제';
+            del.className = 'btn delete';
+            del.style.marginTop = '10px';
+            del.addEventListener('click', async () => {
+              if (!confirm('삭제할까요?')) return;
+              try {
+                await db.collection('posts').doc(id).delete();
+              } catch (err) {
+                alert('삭제 실패: ' + err.message);
+              }
+            });
+            card.appendChild(del);
+          }
+
+          listEl.appendChild(card);
+        });
+      });
+
+    // 유틸(간단 XSS/줄바꿈 처리)
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+    function nl2br(s){
+      return String(s).replace(/\n/g,'<br>');
+    }
   </script>
 </body>
 </html>
+
