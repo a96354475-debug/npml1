@@ -7,7 +7,7 @@ export const firebaseConfig = {
   apiKey: "AIzaSyA6p4h89vtAlho4eztwStPaYN0ORc6i0Q",
   authDomain: "npmlsite.firebaseapp.com",
   projectId: "npmlsite",
-  storageBucket: "npmlsite.appspot.com",
+  storageBucket: "npmlsite.appspot.app",
   messagingSenderId: "186697073652",
   appId: "1:186697073652:web:95a7d17c736a0d95ffafa1"
 };
