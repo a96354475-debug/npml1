@@ -1,21 +1,19 @@
-// firebase-init.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-import { getFirestore, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
 
-export const firebaseConfig = {
-  apiKey: "AIzaSyA6p4h89vtAlho4eztwStPaYN0ORc6i0Q",
-  authDomain: "npmlsite.firebaseapp.com",
-  projectId: "npmlsite",
-  storageBucket: "npmlsite.appspot.app",
-  messagingSenderId: "186697073652",
-  appId: "1:186697073652:web:95a7d17c736a0d95ffafa1"
-};
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAS6p4h09vtAlho4eztwStPaYNO0rc6iOQ",
+    authDomain: "npmlsite.firebaseapp.com",
+    projectId: "npmlsite",
+    storageBucket: "npmlsite.firebasestorage.app",
+    messagingSenderId: "186697073652",
+    appId: "1:186697073652:web:95a7d17c736a0d95ffafa1"
+  };
 
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const provider = new GoogleAuthProvider();
-export const db = getFirestore(app);
-export const ts = () => serverTimestamp();
-
-export { signInWithPopup, signOut, onAuthStateChanged };
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
