@@ -127,45 +127,148 @@
       }
     });
 
-    // 목록 실시간 구독
-    db.collection('posts')
-      .orderBy('createdAt', 'desc')
-      .onSnapshot((snap) => {
-        listEl.innerHTML = '';
-        snap.forEach(doc => {
-          const d = doc.data();
-          const id = doc.id;
-          const ts = d.createdAt?.toDate ? d.createdAt.toDate() : null;
-          const when = ts ? new Date(ts).toLocaleString() : '작성중…';
+   <script>
+  // 🔁 목록 실시간 구독 (Edit 지원)
+  db.collection('posts')
+    .orderBy('createdAt', 'desc')
+    .onSnapshot((snap) => {
+      listEl.innerHTML = '';
+      snap.forEach(doc => {
+        const d  = doc.data();
+        const id = doc.id;
 
-          const card = document.createElement('article');
-          card.className = 'card';
-          card.innerHTML = `
-            <h3>${escapeHtml(d.title || '')}</h3>
-            <div class="meta">${escapeHtml(d.author || '익명')} · <span>${when}</span></div>
-            <div class="body">${nl2br(escapeHtml(d.content || ''))}</div>
-          `;
+        const created = d.createdAt?.toDate ? d.createdAt.toDate() : null;
+        const updated = d.updatedAt?.toDate ? d.updatedAt.toDate() : null;
+        const whenStr = created ? new Date(created).toLocaleString() : '작성중…';
 
-          // 내 글이면 삭제 버튼
-          if (auth.currentUser && d.uid === auth.currentUser.uid) {
-            const del = document.createElement('button');
-            del.textContent = '삭제';
-            del.className = 'btn delete';
-            del.style.marginTop = '10px';
-            del.addEventListener('click', async () => {
-              if (!confirm('삭제할까요?')) return;
+        // 카드
+        const card = document.createElement('article');
+        card.className = 'card';
+
+        // 뷰 모드 엘리먼트
+        const h3   = document.createElement('h3');
+        const meta = document.createElement('div');
+        const body = document.createElement('div');
+
+        h3.textContent = d.title || '';
+        meta.className = 'meta';
+        meta.innerHTML = `
+          ${escapeHtml(d.author || '익명')} · <span>${whenStr}</span>
+          ${updated ? `<span class="edited">(수정됨 ${new Date(updated).toLocaleString()})</span>` : ''}
+        `;
+        body.className = 'body';
+        body.innerHTML = nl2br(escapeHtml(d.content || ''));
+
+        card.append(h3, meta, body);
+
+        // 내 글이면 삭제/수정 버튼
+        if (auth.currentUser && d.uid === auth.currentUser.uid) {
+          const actions = document.createElement('div');
+          actions.className = 'actions';
+
+          const editBtn = document.createElement('button');
+          editBtn.className = 'btn small';
+          editBtn.textContent = '수정';
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'btn delete small';
+          delBtn.textContent = '삭제';
+
+          actions.append(editBtn, delBtn);
+          card.appendChild(actions);
+
+          // 삭제
+          delBtn.addEventListener('click', async () => {
+            if (!confirm('삭제할까요?')) return;
+            try { await db.collection('posts').doc(id).delete(); }
+            catch (err) { alert('삭제 실패: ' + err.message); }
+          });
+
+          // 수정(인라인 에디터 토글)
+          editBtn.addEventListener('click', () => {
+            // 이미 에디터가 열려 있으면 무시
+            if (card.querySelector('form.edit')) return;
+
+            // 뷰를 잠시 숨김
+            h3.style.display = 'none';
+            body.style.display = 'none';
+
+            // 에디트 폼
+            const form = document.createElement('form');
+            form.className = 'edit';
+            form.style.display = 'grid';
+            form.style.gap = '8px';
+            form.style.marginTop = '10px';
+
+            const t = document.createElement('input');
+            t.value = d.title || '';
+            t.required = true;
+            t.maxLength = 100;
+            t.style.padding = '10px';
+            t.style.border = '1px solid #e5e7eb';
+            t.style.borderRadius = '10px';
+
+            const c = document.createElement('textarea');
+            c.value = d.content || '';
+            c.required = true;
+            c.maxLength = 5000;
+            c.style.minHeight = '120px';
+            c.style.padding = '10px';
+            c.style.border = '1px solid #e5e7eb';
+            c.style.borderRadius = '10px';
+
+            const row = document.createElement('div');
+            row.className = 'actions';
+
+            const save = document.createElement('button');
+            save.type = 'submit';
+            save.className = 'btn small';
+            save.textContent = '저장';
+
+            const cancel = document.createElement('button');
+            cancel.type = 'button';
+            cancel.className = 'btn small';
+            cancel.textContent = '취소';
+
+            row.append(save, cancel);
+            form.append(t, c, row);
+            card.appendChild(form);
+
+            // 취소
+            cancel.addEventListener('click', () => {
+              form.remove();
+              h3.style.display = '';
+              body.style.display = '';
+            });
+
+            // 저장
+            form.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const newTitle = t.value.trim();
+              const newCont  = c.value.trim();
+              if (!newTitle || !newCont) return;
+
               try {
-                await db.collection('posts').doc(id).delete();
+                await db.collection('posts').doc(id).update({
+                  title: newTitle,
+                  content: newCont,
+                  updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                // 저장 후 폼 닫기(스냅샷이 다시 오면서 자동 리렌더)
+                form.remove();
+                h3.style.display = '';
+                body.style.display = '';
               } catch (err) {
-                alert('삭제 실패: ' + err.message);
+                alert('수정 실패: ' + err.message);
               }
             });
-            card.appendChild(del);
-          }
+          });
+        }
 
-          listEl.appendChild(card);
-        });
+        listEl.appendChild(card);
       });
+    });
+</script>
 
     // 유틸(간단 XSS/줄바꿈 처리)
     function escapeHtml(s){
