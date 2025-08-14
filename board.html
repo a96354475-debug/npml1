@@ -127,7 +127,6 @@
       }
     });
 
-   <script>
   // 🔁 목록 실시간 구독 (Edit 지원)
   db.collection('posts')
     .orderBy('createdAt', 'desc')
@@ -268,7 +267,6 @@
         listEl.appendChild(card);
       });
     });
-</script>
 
     // 유틸(간단 XSS/줄바꿈 처리)
     function escapeHtml(s){
