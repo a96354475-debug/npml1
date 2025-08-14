@@ -1,59 +1,19 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NPML — Board</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .wrap{max-width:960px;margin:40px auto;padding:0 16px}
+  </style>
 </head>
 <body>
-
-  <div class="nav">
-    <div class="nav-inner">
-      <div class="brand">NPML</div>
-      <nav>
-        <a href="index.html">홈</a>
-        <a href="research.html">Research</a>
-        <a href="publications.html">Publications</a>
-        <a href="people.html">People</a>
-        <a href="board.html" aria-current="page">Board</a>
-      </nav>
-    </div>
+  <div class="wrap">
+    <h1>게시판</h1>
+    <p>여긴 게시판 페이지야. 다음 단계에서 로그인/글쓰기 붙일 거임.</p>
+    <p><a href="index.html">← 홈으로</a></p>
   </div>
-
-  <main class="wrap" style="max-width:900px;margin:32px auto">
-    <h1 style="margin-bottom:16px">게시판</h1>
-
-    <!-- 로그인 영역 -->
-    <section style="margin:12px 0; display:flex; align-items:center; gap:8px">
-      <button id="btnSignIn" class="btn">Google 로그인</button>
-      <button id="btnSignOut" class="btn" style="display:none">로그아웃</button>
-      <span id="whoami" style="font-size:14px;color:var(--muted)"></span>
-    </section>
-
-    <!-- 글쓰기 폼 (로그인한 사람만 보임) -->
-    <section id="writeBox" style="display:none; margin:16px 0">
-      <h3 style="margin-bottom:8px">새 글 쓰기</h3>
-      <form id="postForm" style="display:grid; gap:8px">
-        <input id="title" placeholder="제목 (최대 100자)" maxlength="100" required />
-        <textarea id="content" placeholder="내용 (최대 1000자)" maxlength="1000" rows="6" required></textarea>
-        <button class="btn" type="submit">등록</button>
-      </form>
-    </section>
-
-    <!-- 글 목록 -->
-    <section style="margin:24px 0">
-      <div style="display:flex; justify-content:space-between; align-items:center">
-        <h3>최근 글</h3>
-        <select id="order" style="padding:6px 8px">
-          <option value="desc" selected>최신순</option>
-          <option value="asc">오래된순</option>
-        </select>
-      </div>
-      <ul id="postList" style="list-style:none; padding:0; margin-top:12px; display:grid; gap:10px"></ul>
-    </section>
-  </main>
-
-  <script type="module" src="./board.js"></script>
 </body>
 </html>
