@@ -9,18 +9,19 @@
     .wrap{max-width:960px;margin:40px auto;padding:0 16px}
     .muted{color:#64748b}
     #authBox{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin:16px 0}
-    #loginBtn,#logoutBtn{border:1px solid #e5e7eb;border-radius:10px;padding:8px 12px;background:#f8fafc;cursor:pointer}
-
+    #loginBtn,#logoutBtn,.btn{border:1px solid #e5e7eb;border-radius:10px;padding:8px 12px;background:#f8fafc;cursor:pointer}
+    .btn.delete{border-color:#fecaca;background:#fff0f0}
     form.board{display:grid;gap:8px;margin:16px 0 24px}
     input, textarea, button{font:inherit}
     input, textarea{border:1px solid #e5e7eb;border-radius:10px;padding:10px}
     textarea{min-height:120px;resize:vertical}
-    button.btn{border:1px solid #e5e7eb;border-radius:10px;padding:10px 14px;cursor:pointer;background:#f8fafc}
-    button.delete{border-color:#fecaca;background:#fff0f0}
-
     .card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:12px;background:#fff}
     .card h3{margin:0 0 6px}
     .meta{font-size:12px;color:#64748b;margin-bottom:8px}
+    .actions{display:flex;gap:8px;margin-top:10px}
+    .btn.small{padding:6px 10px;border-radius:8px}
+    .edited{font-size:12px;color:#94a3b8;margin-left:6px}
+    #moreWrap{display:flex;justify-content:center;margin:16px 0 32px}
   </style>
 </head>
 <body>
@@ -44,7 +45,12 @@
     <!-- 목록 -->
     <div id="list"></div>
 
-    <p style="margin-top:20px"><a href="index.html">← 홈으로</a></p>
+    <!-- 더 보기 -->
+    <div id="moreWrap">
+      <button id="moreBtn" class="btn" style="display:none">더 보기</button>
+    </div>
+
+    <p><a href="index.html">← 홈으로</a></p>
   </div>
 
   <!-- Firebase CDN -->
@@ -53,7 +59,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
   <script>
-    // 🔑 네 Firebase 콘솔 설정값
+    // 🔑 Firebase 설정
     const firebaseConfig = {
       apiKey: "AIzaSyAS6p4h09vtAlho4eztwStPaYNO0rc6iOQ",
       authDomain: "npmlsite.firebaseapp.com",
@@ -63,12 +69,12 @@
       appId: "1:186697073652:web:95a7d17c736a0d95ffafa1"
     };
 
-    // Firebase 초기화
+    // 초기화
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // DOM 참조
+    // DOM
     const loginBtn  = document.getElementById('loginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
     const userInfo  = document.getElementById('userInfo');
@@ -76,15 +82,12 @@
     const titleEl   = document.getElementById('title');
     const contentEl = document.getElementById('content');
     const listEl    = document.getElementById('list');
+    const moreBtn   = document.getElementById('moreBtn');
 
-    // Google 로그인/로그아웃
+    // 로그인/로그아웃
     const provider = new firebase.auth.GoogleAuthProvider();
-    loginBtn.addEventListener('click', () => {
-      auth.signInWithPopup(provider).catch(err => alert('로그인 실패: ' + err.message));
-    });
-    logoutBtn.addEventListener('click', () => {
-      auth.signOut().catch(err => alert('로그아웃 실패: ' + err.message));
-    });
+    loginBtn.addEventListener('click', () => auth.signInWithPopup(provider).catch(e=>alert('로그인 실패: '+e.message)));
+    logoutBtn.addEventListener('click', () => auth.signOut().catch(e=>alert('로그아웃 실패: '+e.message)));
 
     // 상태 변경
     let currentUser = null;
@@ -101,9 +104,63 @@
         logoutBtn.style.display = 'none';
         postForm.style.display  = 'none';
       }
+      // 로그인 상태 바뀌면 목록 처음부터 다시 로드
+      resetAndLoad();
     });
 
-    // 글 등록
+    // ===== 페이지네이션 =====
+    const PAGE_SIZE = 5;
+    let cursor = null;     // 마지막 문서(다음 페이지 시작점)
+    let loading = false;
+    let reachedEnd = false;
+
+    moreBtn.addEventListener('click', () => loadPage(false));
+
+    async function loadPage(initial){
+      if (loading || reachedEnd) return;
+      loading = true;
+
+      let q = db.collection('posts').orderBy('createdAt', 'desc').limit(PAGE_SIZE);
+      if (cursor) q = q.startAfter(cursor);
+
+      try{
+        const snap = await q.get();
+        if (snap.empty) {
+          reachedEnd = true;
+          moreBtn.style.display = 'none';
+          loading = false;
+          return;
+        }
+
+        // 다음 페이지를 위한 커서 갱신
+        cursor = snap.docs[snap.docs.length - 1];
+
+        // 렌더
+        renderDocs(snap.docs);
+
+        // 더 보기 버튼 표시/숨김
+        moreBtn.style.display = (snap.size === PAGE_SIZE) ? 'inline-block' : 'none';
+        if (snap.size < PAGE_SIZE) reachedEnd = true;
+      }catch(e){
+        alert('목록 불러오기 실패: ' + e.message);
+      }finally{
+        loading = false;
+      }
+    }
+
+    function resetAndLoad(){
+      listEl.innerHTML = '';
+      moreBtn.style.display = 'none';
+      cursor = null;
+      loading = false;
+      reachedEnd = false;
+      loadPage(true);
+    }
+
+    // 최초 1회 로드 (비로그인 상태에서도 보기 가능)
+    resetAndLoad();
+
+    // ===== 글 등록 =====
     postForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (!currentUser) { alert('로그인이 필요합니다.'); return; }
@@ -121,18 +178,17 @@
         });
         titleEl.value = '';
         contentEl.value = '';
+        // 새 글 등록 후 목록을 처음부터 새로고침
+        resetAndLoad();
       } catch (err) {
         alert('등록 실패: ' + err.message);
         console.error(err);
       }
     });
 
-  // 🔁 목록 실시간 구독 (Edit 지원)
-  db.collection('posts')
-    .orderBy('createdAt', 'desc')
-    .onSnapshot((snap) => {
-      listEl.innerHTML = '';
-      snap.forEach(doc => {
+    // ===== 렌더링 유틸 =====
+    function renderDocs(docs){
+      docs.forEach(doc => {
         const d  = doc.data();
         const id = doc.id;
 
@@ -140,11 +196,9 @@
         const updated = d.updatedAt?.toDate ? d.updatedAt.toDate() : null;
         const whenStr = created ? new Date(created).toLocaleString() : '작성중…';
 
-        // 카드
         const card = document.createElement('article');
         card.className = 'card';
 
-        // 뷰 모드 엘리먼트
         const h3   = document.createElement('h3');
         const meta = document.createElement('div');
         const body = document.createElement('div');
@@ -160,7 +214,6 @@
 
         card.append(h3, meta, body);
 
-        // 내 글이면 삭제/수정 버튼
         if (auth.currentUser && d.uid === auth.currentUser.uid) {
           const actions = document.createElement('div');
           actions.className = 'actions';
@@ -179,103 +232,97 @@
           // 삭제
           delBtn.addEventListener('click', async () => {
             if (!confirm('삭제할까요?')) return;
-            try { await db.collection('posts').doc(id).delete(); }
-            catch (err) { alert('삭제 실패: ' + err.message); }
+            try {
+              await db.collection('posts').doc(id).delete();
+              // 삭제 후 목록 새로고침(현재 페이지부터)
+              resetAndLoad();
+            } catch (err) {
+              alert('삭제 실패: ' + err.message);
+            }
           });
 
-          // 수정(인라인 에디터 토글)
-          editBtn.addEventListener('click', () => {
-            // 이미 에디터가 열려 있으면 무시
-            if (card.querySelector('form.edit')) return;
-
-            // 뷰를 잠시 숨김
-            h3.style.display = 'none';
-            body.style.display = 'none';
-
-            // 에디트 폼
-            const form = document.createElement('form');
-            form.className = 'edit';
-            form.style.display = 'grid';
-            form.style.gap = '8px';
-            form.style.marginTop = '10px';
-
-            const t = document.createElement('input');
-            t.value = d.title || '';
-            t.required = true;
-            t.maxLength = 100;
-            t.style.padding = '10px';
-            t.style.border = '1px solid #e5e7eb';
-            t.style.borderRadius = '10px';
-
-            const c = document.createElement('textarea');
-            c.value = d.content || '';
-            c.required = true;
-            c.maxLength = 5000;
-            c.style.minHeight = '120px';
-            c.style.padding = '10px';
-            c.style.border = '1px solid #e5e7eb';
-            c.style.borderRadius = '10px';
-
-            const row = document.createElement('div');
-            row.className = 'actions';
-
-            const save = document.createElement('button');
-            save.type = 'submit';
-            save.className = 'btn small';
-            save.textContent = '저장';
-
-            const cancel = document.createElement('button');
-            cancel.type = 'button';
-            cancel.className = 'btn small';
-            cancel.textContent = '취소';
-
-            row.append(save, cancel);
-            form.append(t, c, row);
-            card.appendChild(form);
-
-            // 취소
-            cancel.addEventListener('click', () => {
-              form.remove();
-              h3.style.display = '';
-              body.style.display = '';
-            });
-
-            // 저장
-            form.addEventListener('submit', async (e) => {
-              e.preventDefault();
-              const newTitle = t.value.trim();
-              const newCont  = c.value.trim();
-              if (!newTitle || !newCont) return;
-
-              try {
-                await db.collection('posts').doc(id).update({
-                  title: newTitle,
-                  content: newCont,
-                  updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                // 저장 후 폼 닫기(스냅샷이 다시 오면서 자동 리렌더)
-                form.remove();
-                h3.style.display = '';
-                body.style.display = '';
-              } catch (err) {
-                alert('수정 실패: ' + err.message);
-              }
-            });
-          });
+          // 수정
+          editBtn.addEventListener('click', () => openEditor(card, id, d, h3, body));
         }
 
         listEl.appendChild(card);
       });
-    });
+    }
 
-    // 유틸(간단 XSS/줄바꿈 처리)
-    function escapeHtml(s){
-      return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    function openEditor(card, id, d, h3, body){
+      if (card.querySelector('form.edit')) return;
+      h3.style.display = 'none';
+      body.style.display = 'none';
+
+      const form = document.createElement('form');
+      form.className = 'edit';
+      form.style.display = 'grid';
+      form.style.gap = '8px';
+      form.style.marginTop = '10px';
+
+      const t = document.createElement('input');
+      t.value = d.title || '';
+      t.required = true; t.maxLength = 100;
+      t.style.padding = '10px';
+      t.style.border = '1px solid #e5e7eb';
+      t.style.borderRadius = '10px';
+
+      const c = document.createElement('textarea');
+      c.value = d.content || '';
+      c.required = true; c.maxLength = 5000;
+      c.style.minHeight = '120px';
+      c.style.padding = '10px';
+      c.style.border = '1px solid #e5e7eb';
+      c.style.borderRadius = '10px';
+
+      const row = document.createElement('div');
+      row.className = 'actions';
+
+      const save = document.createElement('button');
+      save.type = 'submit';
+      save.className = 'btn small';
+      save.textContent = '저장';
+
+      const cancel = document.createElement('button');
+      cancel.type = 'button';
+      cancel.className = 'btn small';
+      cancel.textContent = '취소';
+
+      row.append(save, cancel);
+      form.append(t, c, row);
+      card.appendChild(form);
+
+      cancel.addEventListener('click', () => {
+        form.remove();
+        h3.style.display = '';
+        body.style.display = '';
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newTitle = t.value.trim();
+        const newCont  = c.value.trim();
+        if (!newTitle || !newCont) return;
+        try{
+          await db.collection('posts').doc(id).update({
+            title: newTitle,
+            content: newCont,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          form.remove();
+          h3.style.display = '';
+          body.style.display = '';
+          // 수정 후 목록 새로고침
+          resetAndLoad();
+        }catch(err){
+          alert('수정 실패: ' + err.message);
+        }
+      });
     }
-    function nl2br(s){
-      return String(s).replace(/\n/g,'<br>');
-    }
+
+    // 간단 유틸
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function nl2br(s){ return String(s).replace(/\n/g,'<br>'); }
   </script>
 </body>
 </html>
-
