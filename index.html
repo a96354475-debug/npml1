@@ -81,17 +81,21 @@
     <div class="grid">
       <!-- Research Carousel -->
       <section class="section" data-carousel id="research-sec">
-        <div class="head">
-          <h2>Research Topics</h2>
-          <div class="controls">
-            <button class="btn" data-prev aria-label="이전">
-              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <button class="btn" data-next aria-label="다음">
-              <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </div>
-        </div>
+       <div class="head">
+  <h2>Research Topics</h2>
+  <div class="actions">
+    <div class="controls">
+      <button class="btn" data-prev aria-label="이전">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="btn" data-next aria-label="다음">
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <!-- 더보기(Research 전체 페이지로 이동) -->
+    <a class="more" href="research.html" aria-label="Research 더보기">+</a>
+  </div>
+</div>
         <div class="clip">
           <div class="track">
             <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/a/640/360" alt=""></div><div class="body"><h3 class="title">천연물 약리기전</h3><div class="meta">활성 성분 분리·동정</div></div></article>
@@ -104,17 +108,22 @@
 
       <!-- Publications Carousel -->
       <section class="section" data-carousel id="pubs-sec">
-        <div class="head">
-          <h2>Recent Publications</h2>
-          <div class="controls">
-            <button class="btn" data-prev aria-label="이전">
-              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <button class="btn" data-next aria-label="다음">
-              <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </div>
-        </div>
+       <div class="head">
+  <h2>Recent Publications</h2>
+  <div class="actions">
+    <div class="controls">
+      <button class="btn" data-prev aria-label="이전">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="btn" data-next aria-label="다음">
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <!-- 더보기(Publications 전체 페이지로 이동) -->
+    <a class="more" href="publications.html" aria-label="Publications 더보기">+</a>
+  </div>
+</div>
+
         <div class="clip">
           <div class="track">
             <article class="card"><div class="thumb"><img src="https://picsum.photos/seed/e/640/360" alt=""></div><div class="body"><h3 class="title">Paper A</h3><div class="meta">Journal · 2025</div></div></article>
@@ -128,14 +137,19 @@
 
     <!-- 공지 & 바로가기 -->
     <section class="two-col" id="links-sec" style="margin-top:24px">
-      <div class="notice">
-        <h3>NOTICES</h3>
-        <ul>
-          <li><a href="#"><span>공지 1</span><time>2025-08-12</time></a></li>
-          <li><a href="#"><span>공지 2</span><time>2025-08-05</time></a></li>
-          <li><a href="#"><span>공지 3</span><time>2025-07-30</time></a></li>
-        </ul>
-      </div>
+     <div class="notice">
+  <div class="sec-head" style="padding:12px 14px; border-bottom:1px solid var(--border);">
+    <h3 style="font-family:Montserrat,sans-serif; font-size:20px; margin:0;">NOTICES</h3>
+    <!-- 공지 전체 페이지(또는 섹션)로 이동 -->
+    <!-- 전용 페이지가 있으면 notices.html로, 지금 구조면 links.html#notices로 -->
+    <a class="more" href="links.html#notices" aria-label="공지 더보기">+</a>
+  </div>
+  <ul style="list-style:none; padding:8px 14px; margin:0;">
+    <li><a href="#"><span>공지 1</span><time>2025-08-12</time></a></li>
+    <li><a href="#"><span>공지 2</span><time>2025-08-05</time></a></li>
+    <li><a href="#"><span>공지 3</span><time>2025-07-30</time></a></li>
+  </ul>
+</div>
       <div class="quick">
         <a class="q3" href="#" target="_blank" rel="noopener">
           GALLERY <small>연구실 사진 보기</small>
