@@ -1,3 +1,4 @@
+<style>
 /* =============================
    NPML — Cleaned style.css
    (정리/중복 제거/섹션별 정렬)
@@ -5,14 +6,13 @@
 
 /* ===== 0) Theme (색/배경/배너) ===== */
 :root{
-  --brand:#004A9F;          /* 포인트 */
-  --border:#e5e7eb;         /* 테두리 */
-  --muted:#475569;          /* 보조 글자색 */
-  --footer-bg:#0f172a;      /* 푸터 배경 */
-  --footer-fg:#e2e8f0;      /* 푸터 글자색 */
-  --quick3:#34d399;         /* 바로가기 카드 색 */
-  --gap:18px;               /* 캐러셀 카드 간격 */
-  /* 히어로 배경 이미지 (src만 교체) */
+  --brand:#004A9F;
+  --border:#e5e7eb;
+  --muted:#475569;
+  --footer-bg:#0f172a;
+  --footer-fg:#e2e8f0;
+  --quick3:#34d399;
+  --gap:18px;
   --hero-img:url('https://images.unsplash.com/photo-1527477396000-e27163b481c2?q=80&w=1600&auto=format&fit=crop');
 }
 
@@ -51,8 +51,8 @@ a{ color:inherit; text-decoration:none; }
 
 /* ===== 5) Section/Card ===== */
 .section{ border:1px solid var(--border); border-radius:14px; padding:12px; background:#fff; }
-.head{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
-.head h2{ margin:0; }
+.head{ display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:nowrap; }
+.head h2{ margin:0; white-space:nowrap; }
 .controls{ display:flex; gap:8px; }
 .btn{ width:36px; height:36px; border:1px solid var(--border); background:#fff; border-radius:10px; display:inline-grid; place-items:center; cursor:pointer; }
 .btn:active{ transform:scale(.98); }
@@ -101,4 +101,5 @@ footer{ margin-top:28px; background:var(--footer-bg); color:var(--footer-fg); }
 /* ===== 10) 섹션 헤더(타이틀+플러스) 정렬 ===== */
 .sec-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .sec-head h3{ margin:0; }
+</style>
 
