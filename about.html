@@ -67,6 +67,14 @@
   <!-- 메인 컨텐츠 -->
   <div class="wrap">
 
+    <!-- 페이지 내부 탭바 -->
+<nav class="subtabs" role="tablist" aria-label="About Tabs">
+  <a href="#vision"    role="tab" aria-selected="true">실험실 비전</a>
+  <a href="#research"  role="tab" aria-selected="false">Research</a>
+  <a href="#equipment" role="tab" aria-selected="false">장비소개</a>
+</nav>
+
+
     <!-- 1) 실험실 비전 -->
     <section id="vision" class="section" style="margin-bottom:18px">
       <div class="head">
@@ -202,5 +210,43 @@
       </div>
     </div>
   </footer>
+  <script>
+(function(){
+  const tabs = Array.from(document.querySelectorAll('.subtabs a'));
+  const panels = ['vision','research','equipment'].map(id=>document.getElementById(id));
+
+  function activate(hash){
+    const ok = /^#(vision|research|equipment)$/.test(hash);
+    const target = ok ? hash : '#vision';
+
+    tabs.forEach(a=>{
+      const on = (a.getAttribute('href') === target);
+      a.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    panels.forEach(p=> p.hidden = ('#'+p.id) !== target);
+
+    // 주소 표시만 바꾸기(스크롤 보정 포함)
+    if(location.hash !== target) history.replaceState(null,'',target);
+    // 탭바 아래로 살짝 맞추기(부드럽게)
+    const y = document.querySelector('.subtabs').getBoundingClientRect().top + window.scrollY - 8;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+
+  // 초기 진입(해시 있으면 그대로 열기)
+  activate(location.hash);
+
+  // 탭 클릭
+  tabs.forEach(a=>{
+    a.addEventListener('click', e=>{
+      e.preventDefault();
+      activate(a.getAttribute('href'));
+    });
+  });
+
+  // 사용자가 주소창 해시를 바꿀 때(뒤로가기 등)
+  window.addEventListener('hashchange', ()=> activate(location.hash));
+})();
+</script>
+
 </body>
 </html>
