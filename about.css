@@ -16,26 +16,6 @@ html{ scroll-behavior: smooth; } /* 부드럽게 스크롤 이동 */
    about.css — About 전용
    ========================= */
 
-/* 1) 페이지 내부 탭바 */
-.subtabs{
-  position: sticky; top:52px; z-index:60;
-  background:#fff; border-bottom:1px solid var(--border);
-  display:flex; gap:8px; padding:8px 4%; flex-wrap:wrap;
-}
-.subtabs a{
-  display:inline-block; padding:8px 12px;
-  border:1px solid var(--border); border-radius:999px;
-  font-weight:700; text-decoration:none; color:inherit; background:#fff;
-}
-.subtabs a[aria-selected="true"]{
-  color:#fff; background:var(--brand); border-color:var(--brand);
-}
-
-/* 2) 앵커 스크롤 보정 + 강조 */
-#vision, #research, #equipment{ scroll-margin-top: 96px; } /* 헤더+탭바 높이 고려 */
-:target .head h2{ box-shadow: inset 0 -8px 0 rgba(0,74,159,.15); }
-html{ scroll-behavior: smooth; }
-
 /* --- 배너 밑 3메뉴 탭바: 전체폭 + 반투명 글래스 --- */
 .subtabs{
   position: sticky; top:52px; z-index:60;
@@ -75,4 +55,13 @@ html{ scroll-behavior: smooth; }
 }
 .subtabs a[aria-selected="true"]{
   color:#fff; background:linear-gradient(135deg, var(--brand), #2563eb);
-  b
+  border-color:transparent; box-shadow:0 8px 22px rgba(0,74,159,.25);
+}
+
+/* 섹션 가림 방지(탭바 높이 반영) */
+#vision,#research,#equipment{ scroll-margin-top: 96px; }
+
+@media (max-width:640px){
+  .subtabs{ padding:8px 10px; gap:8px; }
+  .subtabs a{ padding:8px 12px; font-weight:600; }
+}
