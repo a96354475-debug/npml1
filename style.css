@@ -11,7 +11,6 @@
   --footer-fg:#e2e8f0;   /* 푸터 글자 */
   --quick3:#34d399;      /* GALLERY 카드 색 */
   --gap:18px;            /* 카드 간격 */
-  --hero-img:url('https://images.unsplash.com/photo-1527477396000-e27163b481c2?q=80&w=1600&auto=format&fit=crop'); /* 배너 이미지 */
 }
 
 /* ===== 1) Reset & Base ===== */
