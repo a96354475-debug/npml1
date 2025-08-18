@@ -164,3 +164,6 @@ footer{ margin-top:28px; background:var(--footer-bg); color:var(--footer-fg); }
 /* 텍스트는 위로 */
 .hero > *{ position:relative; z-index:1; }
 
+/* === About 공통 개선 === */
+html{ scroll-behavior: smooth; }
+:target{ scroll-margin-top: 70px; } /* 상단 sticky nav 고려한 앵커 보정 */
