@@ -167,3 +167,45 @@ footer{ margin-top:28px; background:var(--footer-bg); color:var(--footer-fg); }
 /* === About 공통 개선 === */
 html{ scroll-behavior: smooth; }
 :target{ scroll-margin-top: 70px; } /* 상단 sticky nav 고려한 앵커 보정 */
+
+/* ==== 공통: 드롭다운 내비 ==== */
+.nav{ position: sticky; top:0; z-index:100; background:#fff; }
+.nav-inner{ display:flex; justify-content:space-between; align-items:center; gap:16px; height:56px; }
+.nav a[aria-current="page"]{ color: var(--brand, #004A9F); font-weight: 600; }
+
+/* 드롭다운 기본 */
+.nav-drop{ position:relative; display:inline-block; }
+.nav-drop > a{ display:inline-flex; align-items:center; gap:6px; }
+
+/* 메뉴 박스 */
+.nav-drop .menu{
+  position:absolute; left:0; top:100%; /* gap 제거: 바로 아래 붙임 */
+  display:none; min-width:180px;
+  background:#fff; border:1px solid var(--border, #e5e7eb); border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  padding:8px; margin-top:0; /* gap 유발 여지 제거 */
+}
+
+/* hover gap 브리지: 링크와 메뉴 사이 8px 투명 다리 */
+.nav-drop .menu::before{
+  content:""; position:absolute; left:0; right:0; top:-8px; height:8px;
+}
+
+/* 항목 */
+.nav-drop .menu a{
+  display:block; padding:10px 12px; border-radius:8px;
+  white-space:nowrap; color:#111; text-decoration:none;
+}
+.nav-drop .menu a:hover{ background:#f3f4f6; }
+
+/* 열림 상태: hover + 키보드 포커스 모두 지원 */
+.nav-drop:hover .menu,
+.nav-drop:focus-within .menu{ display:block; }
+
+/* 모바일(좁은 폭)에서는 터치 실수 줄이기 */
+@media (max-width: 800px){
+  .nav-inner{ height:auto; padding:8px 0; align-items:flex-start; }
+  .nav nav a{ padding:10px 8px; }
+  .nav-drop .menu{ position:absolute; min-width:200px; }
+}
+
