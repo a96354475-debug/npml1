@@ -36,6 +36,61 @@ html{ scroll-behavior: smooth; } /* 부드럽게 스크롤 이동 */
 :target .head h2{ box-shadow: inset 0 -8px 0 rgba(0,74,159,.15); }
 html{ scroll-behavior: smooth; }
 
+/* --- 배너 밑에 길게 붙는 반투명 탭바 --- */
+.subtabs{
+  /* 위치: 히어로 바로 아래, 스크롤 시 상단 네비 아래에 고정 */
+  position: sticky; top: 52px; z-index: 60;
+
+  /* 사이즈/정렬 */
+  width: 100%;
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+
+  /* 여백: 배너와 “붙는” 느낌으로 위쪽 간격 줄임 */
+  margin-top: -8px;         /* 배너와 거의 붙게 */
+  padding: 10px 12px;
+
+  /* 스타일: 배너 톤 맞춘 반투명 + 블러 */
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: saturate(120%) blur(8px);
+
+  /* 경계선/그라데이션 살짝 */
+  border-top: 1px solid rgba(229,231,235,0.7);
+  border-bottom: 1px solid rgba(229,231,235,0.7);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.06);
+}
+
+/* 탭 버튼 */
+.subtabs a{
+  display:inline-block; padding:9px 14px;
+  border:1px solid rgba(229,231,235,0.9);
+  border-radius: 999px;
+  font-weight: 700; text-decoration: none; color: #0f172a;
+  background: rgba(255,255,255,0.75);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+}
+.subtabs a:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.9);
+  border-color: var(--brand);
+}
+.subtabs a[aria-selected="true"]{
+  color:#fff;
+  background: linear-gradient(135deg, var(--brand), #2563eb);
+  border-color: transparent;
+  box-shadow: 0 8px 22px rgba(0,74,159,0.25);
+}
+
+/* 앵커 스크롤 보정 (탭바 높이 포함) */
+#vision,#research,#equipment{ scroll-margin-top: 96px; }
+
+/* 반응형: 좁아지면 패딩/폰트 살짝 줄이기 */
+@media (max-width: 640px){
+  .subtabs{ padding: 8px 8px; gap: 8px; }
+  .subtabs a{ padding:8px 12px; font-weight: 600; }
+}
+
+
 /* 3) 비전/장비 카드 그리드 */
 .cards-eq{
   display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;
