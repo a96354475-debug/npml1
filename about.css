@@ -1,0 +1,6 @@
+/* About 전용 보조 스타일 */
+
+/* 카드 그리드(비전/장비 소개 재사용) */
+.cards-eq{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px }
+@media(max-width:980px){ .cards-eq{ grid-template-columns:repeat(2,1fr) } }
+@media(max-width:640px){ .cards-eq{ grid-template-columns:1fr } }
