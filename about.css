@@ -2,45 +2,54 @@
    about.css — About 전용
    ========================= */
 
-/* 카드 그리드(비전/장비 소개 재사용) */
-.cards-eq{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px }
-@media(max-width:980px){ .cards-eq{ grid-template-columns:repeat(2,1fr) } }
-@media(max-width:640px){ .cards-eq{ grid-template-columns:1fr } }
+/* 0) 유틸 */
+[hidden]{ display:none !important; }
 
-/* 앵커 스크롤 보정 + 강조 (헤더+탭바 높이 고려) */
-#vision, #research, #equipment{ scroll-margin-top:96px; }
+/* 1) 카드 그리드(비전/장비 공통) */
+.cards-eq{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px }
+@media (max-width:980px){ .cards-eq{ grid-template-columns:repeat(2,1fr) } }
+@media (max-width:640px){ .cards-eq{ grid-template-columns:1fr } }
+
+/* 2) 앵커 스크롤 보정 + 하이라이트 */
+#vision, #research, #equipment{ scroll-margin-top:96px; } /* 헤더+탭바 높이 반영 */
 :target .head h2{ box-shadow: inset 0 -8px 0 rgba(0,74,159,.15); }
 html{ scroll-behavior:smooth; }
 
-/* --- 배너 밑 3메뉴 탭바: 전체폭 + 반투명 글래스 --- */
+/* 3) 배너 밑 내부 탭바(3개 버튼 길~게) */
 .subtabs{
   position:sticky; top:52px; z-index:60;
 
-  /* 전체 화면폭(풀블리드) */
+  /* 전체폭(풀블리드)로 길게 깔기 */
   width:100vw;
   margin-left:calc(50% - 50vw);
   margin-right:calc(50% - 50vw);
 
-  /* 배너와 붙는 느낌 */
+  /* 배너에 붙는 느낌 */
   margin-top:-10px;
   padding:10px 14px;
 
-  /* 반투명 + 블러 */
+  /* 반투명 글래스 효과 */
   background:rgba(255,255,255,.55);
   backdrop-filter:saturate(120%) blur(8px);
 
   border-top:1px solid rgba(229,231,235,.6);
   border-bottom:1px solid rgba(229,231,235,.6);
 
-  display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+  /* 세 칸으로 길게 */
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:12px;
 }
 
-/* 탭 버튼 */
+/* 탭 버튼(길쭉 바 형태) */
 .subtabs a{
-  display:inline-block; padding:9px 14px;
+  display:flex; align-items:center; justify-content:center;
+  padding:14px 16px; height:48px;
   border:1px solid rgba(229,231,235,.9);
-  border-radius:999px; font-weight:700; color:#0f172a;
+  border-radius:12px; /* 살짝만 둥글게 */
+  font-weight:700; color:#0f172a;
   background:rgba(255,255,255,.8);
+  text-decoration:none;
   transition:transform .12s, box-shadow .12s, background .12s, border-color .12s;
 }
 .subtabs a:hover{
@@ -56,8 +65,11 @@ html{ scroll-behavior:smooth; }
   box-shadow:0 8px 22px rgba(0,74,159,.25);
 }
 
-/* 반응형 */
+/* 4) 반응형 */
+@media (max-width:700px){
+  .subtabs{ grid-template-columns:1fr; } /* 모바일은 세로 스택 */
+}
 @media (max-width:640px){
   .subtabs{ padding:8px 10px; gap:8px; }
-  .subtabs a{ padding:8px 12px; font-weight:600; }
+  .subtabs a{ padding:12px 14px; height:auto; font-weight:600; }
 }
