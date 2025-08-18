@@ -147,3 +147,21 @@ footer{ margin-top:28px; background:var(--footer-bg); color:var(--footer-fg); }
 /* ===== 10) Section Header 정렬 ===== */
 .sec-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .sec-head h3{ margin:0; }
+
+/* --- Hero: 흑백 → 호버 시 선명 --- */
+.hero{ position:relative; overflow:hidden; background-image:none !important; }
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image: linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45)), var(--hero-img);
+  background-size: cover; background-position: center;
+  filter: grayscale(65%) brightness(.82);
+  transition: filter .35s ease;
+}
+/* 데스크탑/마우스 환경에서만 호버 */
+@media (hover:hover){
+  .hero:hover::before{ filter: grayscale(0%) brightness(1); }
+}
+/* 텍스트는 위로 */
+.hero > *{ position:relative; z-index:1; }
+
