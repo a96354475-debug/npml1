@@ -31,15 +31,16 @@
   margin-top: -24px;  /* 더 붙이고 싶으면 -28 ~ -36 테스트 */
   padding: 10px 14px;
 
-  /* 투명 처리해서 배너 사진 그대로 보이게 */
-  background: transparent;
-  backdrop-filter: none;
+  /* 배너 사진 그대로 이어지도록 */
+  background: linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45)), var(--hero-img);
+  background-size: cover;
+  background-position: center;
 
   /* 위 경계 제거, 아래만 라인 */
   border-top: 0;
   border-bottom: 1px solid rgba(229,231,235,.65);
 
-  /* 배너→탭바로 자연스러운 페이드(상단 안쪽 음영) */
+  /* 배너→탭바 자연스러운 연결 */
   box-shadow: 0 -18px 24px -18px rgba(0,0,0,.35) inset;
 
   /* 3분할 */
