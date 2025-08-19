@@ -1,124 +1,82 @@
-/* ==========================================================================
-   NPML — Global Styles (style.css)
-   Purpose: 공통 레이아웃/타이포/내비/배너/카드/푸터 등 사이트 전역 스타일
-   --------------------------------------------------------------------------
-   Table of Contents
-   0. Theme Variables
-   1. Reset & Base
-   2. Layout (wrap/grid/helpers)
-   3. Navigation (top bar + dropdown)
-   4. Hero Banner
-   5. Sections & Cards
-   6. Carousel
-   7. Notices & Quick Links
-   8. Footer
-   9. Misc UI (More button / Section header)
-   10. Accessibility & Behavior (smooth scroll / anchor offset)
-   ========================================================================== */
+/* =============================
+   NPML — style.css (외부 파일용)
+   ============================= */
 
-/* === 0) Theme Variables ================================================ */
+/* ===== 0) Theme (색/배경/배너) ===== */
 :root{
-  --brand:#004A9F;        /* 포인트 색 */
-  --border:#e5e7eb;       /* 기본 테두리 */
-  --muted:#475569;        /* 보조 텍스트 */
-  --footer-bg:#0f172a;    /* 푸터 배경 */
-  --footer-fg:#e2e8f0;    /* 푸터 글자 */
-  --quick3:#34d399;       /* GALLERY 카드 색 */
-  --gap:18px;             /* 캐러셀 카드 간격 */
+  --brand:#004A9F;       /* 포인트 색 */
+  --border:#e5e7eb;      /* 기본 테두리 */
+  --muted:#475569;       /* 보조 텍스트 */
+  --footer-bg:#0f172a;   /* 푸터 배경 */
+  --footer-fg:#e2e8f0;   /* 푸터 글자 */
+  --quick3:#34d399;      /* GALLERY 카드 색 */
+  --gap:18px;            /* 카드 간격 */
 }
 
-/* === 1) Reset & Base ==================================================== */
+/* ===== 1) Reset & Base ===== */
 *{ box-sizing:border-box; margin:0; padding:0; }
 html, body{ width:100%; min-height:100%; }
-html{ scroll-behavior:smooth; }                 /* 부드러운 스크롤 */
 body{
   font-family:"Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:#0f172a; background:#fff; overflow-x:hidden;
 }
+h2{ font-family:Montserrat,sans-serif; font-size:28px; margin-bottom:12px; }
 a{ color:inherit; text-decoration:none; }
-h2{
-  font-family:Montserrat,sans-serif;
-  font-size:28px; margin-bottom:12px;
-}
-/* 앵커로 점프할 때 sticky 헤더 높이만큼 여유 */
-:target{ scroll-margin-top:70px; }
 
-/* === 2) Layout ========================================================== */
-.wrap{ width:100%; max-width:1200px; margin:24px auto; padding:0 4%; }
-.grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-@media (max-width:980px){ .grid{ grid-template-columns:1fr; } }
-
-/* 묶음 버튼/컨트롤 */
-.actions{ display:flex; align-items:center; gap:8px; }
-
-/* === 3) Navigation (Top + Dropdown) ==================================== */
-.nav{
-  position:sticky; top:0; z-index:100;
-  background:#fff; border-bottom:1px solid var(--border);
-}
+/* ===== 2) Navigation ===== */
+.nav{ position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--border); }
 .nav-inner{
   max-width:1200px; margin:0 auto; padding:0 4%;
-  display:flex; justify-content:space-between; align-items:center; gap:16px;
-  height:56px;
+  display:flex; justify-content:space-between; align-items:center; height:52px;
 }
 .brand{ font-family:Montserrat,sans-serif; font-weight:700; font-size:18px; }
 .nav nav{ display:flex; align-items:center; gap:20px; white-space:nowrap; }
 .nav nav a{ font-weight:600; }
 .nav nav a:hover{ color:var(--brand); }
-.nav a[aria-current="page"]{ color:var(--brand); font-weight:600; }
+/* 현재 페이지 강조 */
+.nav a[aria-current="page"] { color: var(--brand); }
 
-/* Dropdown */
+
+/* 드롭다운 메뉴 */
 .nav-drop{ position:relative; display:inline-block; }
-.nav-drop > a{ display:inline-flex; align-items:center; gap:6px; }
-.nav-drop .menu{
-  position:absolute; left:0; top:100%;
-  display:none; min-width:180px; margin-top:0; padding:8px;
-  background:#fff; border:1px solid var(--border); border-radius:10px;
-  box-shadow:0 8px 24px rgba(0,0,0,.08); z-index:100;
+.nav-drop>.menu{
+  position:absolute; top:100%; left:0; margin-top:8px; min-width:140px;
+  background:#fff; border:1px solid var(--border); border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  padding:8px; display:grid; gap:6px;
+  opacity:0; transform:translateY(6px); pointer-events:none;
+  transition:opacity .15s ease, transform .15s ease; z-index:100;
 }
 .nav-drop .menu::before{ content:""; position:absolute; left:0; right:0; top:-8px; height:8px; }
-.nav-drop .menu a{
-  display:block; padding:10px 12px; border-radius:8px; font-weight:600; color:#111;
+.nav-drop .menu a{ display:block; padding:8px 10px; border-radius:8px; font-weight:600; }
+.nav-drop:hover .menu, .nav-drop:focus-within .menu{
+  opacity:1; transform:translateY(0); pointer-events:auto;
 }
-.nav-drop .menu a:hover{ background:#f3f4f6; }
-/* open on hover & focus */
-.nav-drop:hover .menu,
-.nav-drop:focus-within .menu{ display:block; }
+@media (max-width:640px){ .nav-drop>.menu{ left:auto; right:0; } }
 
-@media (max-width:800px){
-  .nav-inner{ height:auto; padding:8px 0; align-items:flex-start; }
-  .nav nav a{ padding:10px 8px; }
-  .nav-drop .menu{ min-width:200px; right:0; left:auto; }
-}
-
-/* === 4) Hero Banner ===================================================== */
+/* ===== 3) Hero Banner ===== */
 .hero{
-  position:relative; overflow:hidden; display:grid; place-items:center;
-  min-height:240px; padding:36px 4%; text-align:center; color:#fff;
-  /* 실제 이미지는 ::before에 넣어서 효과주기 */
-  background-image:none !important;
-}
-.hero::before{
-  content:""; position:absolute; inset:0;
-  background-image: linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45)), var(--hero-img);
+  position:relative; display:grid; place-items:center; text-align:center; color:#fff;
+  background-image:linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45)), var(--hero-img);
   background-size:cover; background-position:center;
-  filter:grayscale(65%) brightness(.82);
-  transition:filter .35s ease;
+  min-height:240px; padding:36px 4%;
 }
-.hero > *{ position:relative; z-index:1; }
 .hero h1{ font-family:Montserrat,sans-serif; font-size:34px; letter-spacing:.2px; margin-bottom:8px; }
 .hero p{ opacity:.95; }
-/* 데스크탑에서만 hover 시 선명 */
-@media (hover:hover){ .hero:hover::before{ filter:grayscale(0%) brightness(1); } }
 
-/* === 5) Sections & Cards =============================================== */
-.section{
-  border:1px solid var(--border); border-radius:14px; padding:12px; background:#fff;
-}
+/* ===== 4) Layout ===== */
+.wrap{ width:100%; max-width:1200px; margin:24px auto; padding:0 4%; }
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+@media (max-width:980px){ .grid{ grid-template-columns:1fr; } }
+
+/* 헤더 오른쪽(캐러셀 버튼 + 더보기) 묶음 */
+.actions{ display:flex; align-items:center; gap:8px; }
+
+/* ===== 5) Section & Card ===== */
+.section{ border:1px solid var(--border); border-radius:14px; padding:12px; background:#fff; }
 .head{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .head h2{ margin:0; white-space:nowrap; }
 .controls{ display:flex; gap:8px; }
-
 .btn{
   width:28px; height:28px; border:1px solid var(--border); background:#fff;
   border-radius:8px; display:inline-grid; place-items:center; cursor:pointer;
@@ -126,43 +84,36 @@ h2{
 .btn:active{ transform:scale(.98); }
 .btn svg{ width:14px; height:14px; }
 
-/* 카드 공통 */
+/* ===== 6) Carousel ===== */
+.clip{ overflow:hidden; border-radius:10px; }
+.track{ display:flex; gap:var(--gap); will-change:transform; transition:transform .4s ease; }
 .card{
+  flex:0 0 calc((100% - var(--gap)*2)/3);
   border:1px solid var(--border); border-radius:12px; overflow:hidden; background:#fff;
   display:flex; flex-direction:column;
 }
+@media (max-width:1200px){ .card{ flex-basis:calc((100% - var(--gap))/2); } }
+@media (max-width:640px){ .card{ flex-basis:100%; } }
 .thumb{ aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; background:#fafafa; }
-/* 카드 이미지: 항상 프레임을 꽉 채움 */
-.thumb img{ width:100%; height:100%; object-fit:cover;/* 16:9 프레임에 자동 크롭 */ display:block; }
+.thumb img{ max-width:82%; max-height:82%; display:block; }
 .body{ padding:12px 14px; }
 .title{ font-weight:700; margin-bottom:6px; }
 .meta{ color:var(--muted); font-size:13px; }
 
-/* === 6) Carousel ======================================================== */
-.clip{ overflow:hidden; border-radius:10px; }
-.track{ display:flex; gap:var(--gap); will-change:transform; transition:transform .4s ease; }
-.card.carousel{
-  /* 캐러셀 카드일 때만 폭 계산을 적용하려면 .carousel 보조 클래스를 선택적으로 사용 */
-  flex:0 0 calc((100% - var(--gap)*2)/3);
-}
-.card{ flex:0 0 auto; } /* 기본 카드도 수평 배치 지원 */
-@media (max-width:1200px){ .card.carousel{ flex-basis:calc((100% - var(--gap))/2); } }
-@media (max-width:640px){ .card.carousel{ flex-basis:100%; } }
-
-/* === 7) Notices & Quick Links ========================================== */
+/* ===== 7) Notices & Quick Links ===== */
 .two-col{ display:grid; grid-template-columns:1.3fr .7fr; gap:24px; }
 @media (max-width:980px){ .two-col{ grid-template-columns:1fr; } }
-
-.notice{ border:1px solid var(--border); border-radius:12px; background:#fff; }
+.notice{
+  border:1px solid var(--border); border-radius:12px; background:#fff;
+}
 .notice h3{
-  font-family:Montserrat,sans-serif; font-size:20px;
-  padding:12px 14px; border-bottom:1px solid var(--border);
+  font-family:Montserrat,sans-serif; font-size:20px; padding:12px 14px;
+  border-bottom:1px solid var(--border);
 }
 .notice ul{ list-style:none; padding:8px 14px; }
 .notice li+li{ border-top:1px dashed var(--border); }
 .notice a{ display:flex; align-items:center; justify-content:space-between; padding:10px 2px; }
 .notice time{ color:var(--muted); font-size:12px; margin-left:10px; white-space:nowrap; }
-
 .quick{ display:grid; grid-template-columns:1fr; gap:16px; }
 .quick a{
   display:block; border-radius:14px; padding:18px 16px; color:#fff; font-weight:700;
@@ -171,7 +122,7 @@ h2{
 .q3{ background:linear-gradient(135deg,var(--quick3),#34d399); }
 .quick small{ display:block; font-weight:600; opacity:.95; margin-top:6px; }
 
-/* === 8) Footer ========================================================== */
+/* ===== 8) Footer ===== */
 footer{ margin-top:28px; background:var(--footer-bg); color:var(--footer-fg); }
 .foot-inner{ max-width:1200px; margin:0 auto; padding:18px 4%; }
 .foot-top{
@@ -182,7 +133,7 @@ footer{ margin-top:28px; background:var(--footer-bg); color:var(--footer-fg); }
 .foot-links a:hover{ opacity:1; text-decoration:underline; }
 .foot-meta{ font-size:13px; opacity:.85; line-height:1.6; }
 
-/* === 9) Misc UI ========================================================= */
+/* ===== 9) More 버튼 ===== */
 .more{
   display:inline-flex; width:28px; height:28px; border-radius:9999px;
   border:1px solid var(--border); align-items:center; justify-content:center;
@@ -192,5 +143,69 @@ footer{ margin-top:28px; background:var(--footer-bg); color:var(--footer-fg); }
 .more:active{ transform:translateY(1px); }
 .more:focus-visible{ outline:2px solid #3b82f6; outline-offset:2px; }
 
+/* ===== 10) Section Header 정렬 ===== */
 .sec-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .sec-head h3{ margin:0; }
+
+/* --- Hero: 흑백 → 호버 시 선명 --- */
+.hero{ position:relative; overflow:hidden; background-image:none !important; }
+.hero::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image: linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45)), var(--hero-img);
+  background-size: cover; background-position: center;
+  filter: grayscale(65%) brightness(.82);
+  transition: filter .35s ease;
+}
+/* 데스크탑/마우스 환경에서만 호버 */
+@media (hover:hover){
+  .hero:hover::before{ filter: grayscale(0%) brightness(1); }
+}
+/* 텍스트는 위로 */
+.hero > *{ position:relative; z-index:1; }
+
+/* === About 공통 개선 === */
+html{ scroll-behavior: smooth; }
+:target{ scroll-margin-top: 70px; } /* 상단 sticky nav 고려한 앵커 보정 */
+
+/* ==== 공통: 드롭다운 내비 ==== */
+.nav{ position: sticky; top:0; z-index:100; background:#fff; }
+.nav-inner{ display:flex; justify-content:space-between; align-items:center; gap:16px; height:56px; }
+.nav a[aria-current="page"]{ color: var(--brand, #004A9F); font-weight: 600; }
+
+/* 드롭다운 기본 */
+.nav-drop{ position:relative; display:inline-block; }
+.nav-drop > a{ display:inline-flex; align-items:center; gap:6px; }
+
+/* 메뉴 박스 */
+.nav-drop .menu{
+  position:absolute; left:0; top:100%; /* gap 제거: 바로 아래 붙임 */
+  display:none; min-width:180px;
+  background:#fff; border:1px solid var(--border, #e5e7eb); border-radius:10px;
+  box-shadow:0 8px 24px rgba(0,0,0,.08);
+  padding:8px; margin-top:0; /* gap 유발 여지 제거 */
+}
+
+/* hover gap 브리지: 링크와 메뉴 사이 8px 투명 다리 */
+.nav-drop .menu::before{
+  content:""; position:absolute; left:0; right:0; top:-8px; height:8px;
+}
+
+/* 항목 */
+.nav-drop .menu a{
+  display:block; padding:10px 12px; border-radius:8px;
+  white-space:nowrap; color:#111; text-decoration:none;
+}
+.nav-drop .menu a:hover{ background:#f3f4f6; }
+
+/* 열림 상태: hover + 키보드 포커스 모두 지원 */
+.nav-drop:hover .menu,
+.nav-drop:focus-within .menu{ display:block; }
+
+/* 모바일(좁은 폭)에서는 터치 실수 줄이기 */
+@media (max-width: 800px){
+  .nav-inner{ height:auto; padding:8px 0; align-items:flex-start; }
+  .nav nav a{ padding:10px 8px; }
+  .nav-drop .menu{ position:absolute; min-width:200px; }
+}
+
