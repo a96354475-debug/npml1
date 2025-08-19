@@ -209,3 +209,11 @@ html{ scroll-behavior: smooth; }
   .nav-drop .menu{ position:absolute; min-width:200px; }
 }
 
+/* ===== 11) Board (공통) ===== */
+.board{border:1px solid var(--border);border-radius:12px;background:#fff;overflow:hidden}
+.board table{width:100%;border-collapse:collapse}
+.board th,.board td{padding:12px 14px;border-bottom:1px solid var(--border)}
+.board th{background:#f8fafc;text-align:left}
+.board tr:hover td{background:#f1f5f9}
+.board .title{color:var(--brand);font-weight:600}
+.board time{color:var(--muted);font-size:13px;white-space:nowrap}
