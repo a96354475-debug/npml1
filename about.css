@@ -32,7 +32,7 @@
   padding: 10px 14px;
 
   /* 글래스 + 흐림 */
-  background: rgba(255,255,255,.50);
+  background: rgba(255,255,255,.10);
   backdrop-filter: saturate(120%) blur(8px);
 
   /* 위 경계 제거, 아래만 라인 */
@@ -48,33 +48,27 @@
   gap: 12px;
 }
 
-/* 탭 버튼(길쭉 바) */
-.subtabs a{
+/* 투명 유리 느낌 버튼 */
+.subtabs a {
   display:flex; align-items:center; justify-content:center;
-  gap:8px;                      /* 아이콘 쓸 때 간격도 커버 */
+  gap:8px;
   padding:14px 16px; height:48px;
-  border:1px solid rgba(229,231,235,.9);
+  border:1px solid rgba(255,255,255,.3);
   border-radius:12px;
-  font-weight:700; color:#0f172a;
-  background:rgba(255,255,255,.86);
+  font-weight:700; color:#fff;
+  background:rgba(255,255,255,.15);
   text-decoration:none;
-  transition:transform .12s, box-shadow .12s, background .12s, border-color .12s;
+  transition: all .2s ease;
 }
-.subtabs a:hover{
-  transform:translateY(-1px);
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-  background:rgba(255,255,255,.95);
+.subtabs a:hover {
+  background:rgba(255,255,255,.35);
   border-color:var(--brand);
+  color:var(--brand);
 }
-.subtabs a[aria-selected="true"]{
-  color:#fff;
-  background:linear-gradient(135deg, var(--brand), #2563eb);
-  border-color:transparent;
-  box-shadow:0 8px 22px rgba(0,74,159,.25);
-}
-.subtabs a[aria-selected="true"] svg{
-  /* 아이콘 사용할 경우 활성 탭에서 밝게 */
-  filter:brightness(0) invert(1);
+.subtabs a[aria-selected="true"] {
+  background:rgba(255,255,255,.55);
+  color:var(--brand);
+  border-color:var(--brand);
 }
 
 /* 4) 반응형 */
@@ -85,4 +79,3 @@
   .subtabs{ padding:8px 10px; gap:8px; }
   .subtabs a{ padding:12px 14px; height:auto; font-weight:600; }
 }
-
