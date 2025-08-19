@@ -1,54 +1,69 @@
 /* ==========================================================================
-   NPML — About Page Styles (about.css)
-   Purpose: About 전용 서브 탭/그리드/앵커 보정 등
+   about.css — About 전용 (유틸/카드그리드/앵커보정 + 배너연결 subtabs)
    ========================================================================== */
 
-/* === Utilities ========================================================== */
+/* 0) 유틸 */
 [hidden]{ display:none !important; }
 
-/* === Cards Grid (비전/장비 공통) ======================================= */
+/* 1) 카드 그리드(비전/장비 공통) */
 .cards-eq{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
 @media (max-width:980px){ .cards-eq{ grid-template-columns:repeat(2,1fr); } }
 @media (max-width:640px){ .cards-eq{ grid-template-columns:1fr; } }
 
-/* === Anchor Scroll & Highlight ========================================= */
-#vision, #research, #equipment{ scroll-margin-top:96px; } /* 헤더+탭바 높이 반영 */
+/* 2) 앵커 스크롤 보정 + 하이라이트
+   - sticky 내비(56px) + subtabs 높이 감안해서 여유값 확보 */
+#vision, #research, #equipment{ scroll-margin-top:96px; } /* 헤더+탭바 보정 */
 :target .head h2{ box-shadow: inset 0 -8px 0 rgba(0,74,159,.15); }
+/* NOTE: html{scroll-behavior}는 전역(style.css)에서 처리하므로 중복 선언 제거 */
 
-/* === Sub Tabs (배너 바로 아래 고정되는 3-버튼 바) ===================== */
+/* 3) 배너 밑 내부 탭바(3개 버튼 길~게) — 배너와 연결되게 미세 조정 */
 .subtabs{
-  position:sticky; top:52px; z-index:60;
+  position: sticky;
+  top: 56px;          /* 전역 내비 높이와 일치 */
+  z-index: 60;
 
-  /* 풀블리드(전체폭) */
-  width:100vw;
-  margin-left:calc(50% - 50vw);
-  margin-right:calc(50% - 50vw);
+  /* 전체폭(풀블리드) */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 
-  /* 배너에 붙는 느낌 */
-  margin-top:-10px; padding:10px 14px;
+  /* 배너에 '겹쳐 붙는' 느낌 */
+  margin-top: -24px;  /* 더 붙이고 싶으면 -28 ~ -36 테스트 */
+  padding: 10px 14px;
 
-  /* 반투명 글래스 */
-  background:rgba(255,255,255,.55);
-  backdrop-filter:saturate(120%) blur(8px);
+  /* 글래스 + 흐림 */
+  background: rgba(255,255,255,.50);
+  backdrop-filter: saturate(120%) blur(8px);
 
-  border-top:1px solid rgba(229,231,235,.6);
-  border-bottom:1px solid rgba(229,231,235,.6);
+  /* 위 경계 제거, 아래만 라인 */
+  border-top: 0;
+  border-bottom: 1px solid rgba(229,231,235,.65);
 
-  display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px;
+  /* 배너→탭바로 자연스러운 페이드(상단 안쪽 음영) */
+  box-shadow: 0 -18px 24px -18px rgba(0,0,0,.35) inset;
+
+  /* 3분할 */
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
 }
+
+/* 탭 버튼(길쭉 바) */
 .subtabs a{
   display:flex; align-items:center; justify-content:center;
+  gap:8px;                      /* 아이콘 쓸 때 간격도 커버 */
   padding:14px 16px; height:48px;
   border:1px solid rgba(229,231,235,.9);
   border-radius:12px;
-  font-weight:700; color:#0f172a; background:rgba(255,255,255,.8);
+  font-weight:700; color:#0f172a;
+  background:rgba(255,255,255,.86);
   text-decoration:none;
   transition:transform .12s, box-shadow .12s, background .12s, border-color .12s;
 }
 .subtabs a:hover{
   transform:translateY(-1px);
   box-shadow:0 6px 18px rgba(0,0,0,.08);
-  background:rgba(255,255,255,.92);
+  background:rgba(255,255,255,.95);
   border-color:var(--brand);
 }
 .subtabs a[aria-selected="true"]{
@@ -57,8 +72,12 @@
   border-color:transparent;
   box-shadow:0 8px 22px rgba(0,74,159,.25);
 }
+.subtabs a[aria-selected="true"] svg{
+  /* 아이콘 사용할 경우 활성 탭에서 밝게 */
+  filter:brightness(0) invert(1);
+}
 
-/* === Responsive ========================================================= */
+/* 4) 반응형 */
 @media (max-width:700px){
   .subtabs{ grid-template-columns:1fr; } /* 모바일은 세로 스택 */
 }
