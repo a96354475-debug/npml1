@@ -31,9 +31,9 @@
   margin-top: -24px;  /* 더 붙이고 싶으면 -28 ~ -36 테스트 */
   padding: 10px 14px;
 
-  /* 글래스 + 흐림 */
-  background: rgba(255,255,255,.10);
-  backdrop-filter: saturate(120%) blur(8px);
+  /* 투명 처리해서 배너 사진 그대로 보이게 */
+  background: transparent;
+  backdrop-filter: none;
 
   /* 위 경계 제거, 아래만 라인 */
   border-top: 0;
@@ -48,25 +48,25 @@
   gap: 12px;
 }
 
-/* 투명 유리 느낌 버튼 */
+/* 버튼: 완전 투명, 글씨만 남기기 */
 .subtabs a {
   display:flex; align-items:center; justify-content:center;
   gap:8px;
   padding:14px 16px; height:48px;
-  border:1px solid rgba(255,255,255,.3);
+  border:1px solid rgba(255,255,255,.5);
   border-radius:12px;
   font-weight:700; color:#fff;
-  background:rgba(255,255,255,.15);
+  background:transparent;
   text-decoration:none;
   transition: all .2s ease;
 }
 .subtabs a:hover {
-  background:rgba(255,255,255,.35);
+  background:rgba(255,255,255,.15);
   border-color:var(--brand);
   color:var(--brand);
 }
 .subtabs a[aria-selected="true"] {
-  background:rgba(255,255,255,.55);
+  background:rgba(255,255,255,.25);
   color:var(--brand);
   border-color:var(--brand);
 }
