@@ -14,7 +14,7 @@
 #vision, #research, #equipment{ scroll-margin-top:96px; }
 :target .head h2{ box-shadow: inset 0 -8px 0 rgba(0,74,159,.15); }
 
-/* 3) 배너 안쪽 subtabs */
+/* 3) 배너 밑에 subtabs */
 .subtabs{
   position: sticky;
   top: 56px;          /* 전역 내비 높이와 일치 */
@@ -24,7 +24,6 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   padding: 10px 14px;
-  margin-top: 16px;
 
   /* 배너 배경 그대로 보이게 */
   background: transparent;
